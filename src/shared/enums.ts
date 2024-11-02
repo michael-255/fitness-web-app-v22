@@ -134,7 +134,7 @@ export enum LogLevelEnum {
 export enum MeasurementFieldEnum {
     // Diet & Weight
     CALORIES = 'Calories',
-    CARBOHYDRATES = 'Carbohydrates',
+    CARBS = 'Carbs',
     FAT = 'Fat',
     PROTEIN = 'Protein',
     WEIGHT = 'Weight',

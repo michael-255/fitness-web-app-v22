@@ -48,16 +48,17 @@ const emit = defineEmits<{
 
                 <q-item-label v-if="recordLastChildCreatedAt" caption>
                     <div class="text-grey-5">
-                        {{ compactDateFromMs(recordLastChildCreatedAt) }}
+                        <span class="q-mr-xs">
+                            {{ compactDateFromMs(recordLastChildCreatedAt) }}
+                        </span>
+                        <q-badge
+                            outline
+                            :color="timeAgo(recordLastChildCreatedAt).color"
+                            class="q-mt-xs"
+                        >
+                            {{ timeAgo(recordLastChildCreatedAt).message }}
+                        </q-badge>
                     </div>
-
-                    <q-badge
-                        outline
-                        :color="timeAgo(recordLastChildCreatedAt).color"
-                        class="q-mt-xs"
-                    >
-                        {{ timeAgo(recordLastChildCreatedAt).message }}
-                    </q-badge>
                 </q-item-label>
 
                 <q-item-label v-else caption> No previous records found </q-item-label>

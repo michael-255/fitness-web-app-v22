@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DialogMeasurementsDietWeight from '@/components/dialogs/measurements/DialogMeasurementsDietWeight.vue'
 import PageFabMenu from '@/components/page/PageFabMenu.vue'
 import PageHeading from '@/components/page/PageHeading.vue'
 import PageResponsive from '@/components/page/PageResponsive.vue'
@@ -7,13 +8,13 @@ import { appName } from '@/shared/constants'
 import { RouteNameEnum, TableEnum } from '@/shared/enums'
 import {
     addIcon,
+    bodyModuleIcon,
     chartsIcon,
     dietWeightModuleIcon,
     healthModuleIcon,
     labWorkModuleIcon,
     measurementsPageIcon,
 } from '@/shared/icons'
-import { compactDateFromMs, timeAgo } from '@/shared/utils'
 import { useMeta, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 
@@ -21,8 +22,6 @@ useMeta({ title: `${appName} - Measurements Dashboard` })
 
 const $q = useQuasar()
 const router = useRouter()
-
-const phTimestamp = Date.now()
 </script>
 
 <template>
@@ -56,29 +55,11 @@ const phTimestamp = Date.now()
 
         <q-list padding>
             <q-item>
-                <q-item-section top>
+                <q-item-section>
                     <q-card>
                         <q-item class="q-mt-sm">
                             <q-item-section top>
                                 <q-item-label class="text-h5"> Diet & Weight </q-item-label>
-
-                                <q-item-label v-if="phTimestamp" caption>
-                                    <div class="text-grey-5">
-                                        {{ compactDateFromMs(phTimestamp) }}
-                                    </div>
-
-                                    <q-badge
-                                        outline
-                                        :color="timeAgo(phTimestamp).color"
-                                        class="q-mt-xs"
-                                    >
-                                        {{ timeAgo(phTimestamp).message }}
-                                    </q-badge>
-                                </q-item-label>
-
-                                <q-item-label v-else caption>
-                                    No previous records found
-                                </q-item-label>
                             </q-item-section>
 
                             <q-item-section top side>
@@ -110,9 +91,15 @@ const phTimestamp = Date.now()
                             <q-btn
                                 :disable="$q.loading.isActive"
                                 color="primary"
-                                label="Diet & Weight Module"
+                                label="Access Module"
                                 class="full-width"
                                 :icon="dietWeightModuleIcon"
+                                @click="
+                                    () =>
+                                        $q.dialog({
+                                            component: DialogMeasurementsDietWeight,
+                                        })
+                                "
                             />
                         </q-card-actions>
                     </q-card>
@@ -125,24 +112,6 @@ const phTimestamp = Date.now()
                         <q-item class="q-mt-sm">
                             <q-item-section top>
                                 <q-item-label class="text-h5">Health</q-item-label>
-
-                                <q-item-label v-if="phTimestamp" caption>
-                                    <div class="text-grey-5">
-                                        {{ compactDateFromMs(phTimestamp) }}
-                                    </div>
-
-                                    <q-badge
-                                        outline
-                                        :color="timeAgo(phTimestamp).color"
-                                        class="q-mt-xs"
-                                    >
-                                        {{ timeAgo(phTimestamp).message }}
-                                    </q-badge>
-                                </q-item-label>
-
-                                <q-item-label v-else caption>
-                                    No previous records found
-                                </q-item-label>
                             </q-item-section>
 
                             <q-item-section top side>
@@ -173,7 +142,7 @@ const phTimestamp = Date.now()
                             <q-btn
                                 :disable="$q.loading.isActive"
                                 color="primary"
-                                label="Health Module"
+                                label="Access Module"
                                 class="full-width"
                                 :icon="healthModuleIcon"
                             />
@@ -188,24 +157,6 @@ const phTimestamp = Date.now()
                         <q-item class="q-mt-sm">
                             <q-item-section top>
                                 <q-item-label class="text-h5">Body</q-item-label>
-
-                                <q-item-label v-if="phTimestamp" caption>
-                                    <div class="text-grey-5">
-                                        {{ compactDateFromMs(phTimestamp) }}
-                                    </div>
-
-                                    <q-badge
-                                        outline
-                                        :color="timeAgo(phTimestamp).color"
-                                        class="q-mt-xs"
-                                    >
-                                        {{ timeAgo(phTimestamp).message }}
-                                    </q-badge>
-                                </q-item-label>
-
-                                <q-item-label v-else caption>
-                                    No previous records found
-                                </q-item-label>
                             </q-item-section>
 
                             <q-item-section top side>
@@ -237,9 +188,9 @@ const phTimestamp = Date.now()
                             <q-btn
                                 :disable="$q.loading.isActive"
                                 color="primary"
-                                label="Body Module"
+                                label="Access Module"
                                 class="full-width"
-                                :icon="measurementsPageIcon"
+                                :icon="bodyModuleIcon"
                             />
                         </q-card-actions>
                     </q-card>
@@ -252,24 +203,6 @@ const phTimestamp = Date.now()
                         <q-item class="q-mt-sm">
                             <q-item-section top>
                                 <q-item-label class="text-h5">Lab Work</q-item-label>
-
-                                <q-item-label v-if="phTimestamp" caption>
-                                    <div class="text-grey-5">
-                                        {{ compactDateFromMs(phTimestamp) }}
-                                    </div>
-
-                                    <q-badge
-                                        outline
-                                        :color="timeAgo(phTimestamp).color"
-                                        class="q-mt-xs"
-                                    >
-                                        {{ timeAgo(phTimestamp).message }}
-                                    </q-badge>
-                                </q-item-label>
-
-                                <q-item-label v-else caption>
-                                    No previous records found
-                                </q-item-label>
                             </q-item-section>
 
                             <q-item-section top side>
@@ -302,7 +235,7 @@ const phTimestamp = Date.now()
                             <q-btn
                                 :disable="$q.loading.isActive"
                                 color="primary"
-                                label="Lab Work Module"
+                                label="Access Module"
                                 class="full-width"
                                 :icon="labWorkModuleIcon"
                             />

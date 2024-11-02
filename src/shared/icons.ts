@@ -10,6 +10,7 @@ import {
     symRoundedCheck,
     symRoundedClose,
     symRoundedCode,
+    symRoundedConditions,
     symRoundedDatabase,
     symRoundedDataTable,
     symRoundedDelete,
@@ -21,6 +22,7 @@ import {
     symRoundedEventAvailable,
     symRoundedFeatureSearch,
     symRoundedFitnessCenter,
+    symRoundedHealthMetrics,
     symRoundedInfo,
     symRoundedKeyboardArrowDown,
     symRoundedKeyboardArrowUp,
@@ -31,10 +33,10 @@ import {
     symRoundedLockOpenRight,
     symRoundedManageSearch,
     symRoundedMenu,
-    symRoundedMonitorHeart,
     symRoundedMonitoring,
     symRoundedMonitorWeight,
     symRoundedMoreVert,
+    symRoundedOpenInNew,
     symRoundedPublish,
     symRoundedRecommend,
     symRoundedRedeem,
@@ -70,9 +72,10 @@ export const settingsPageIcon = symRoundedSettings
 export const plansPageIcon = symRoundedTactic
 export const workoutsPageIcon = symRoundedAssignment
 export const exercisesPageIcon = symRoundedFitnessCenter
-export const measurementsPageIcon = symRoundedStraighten
+export const measurementsPageIcon = symRoundedConditions
 export const dietWeightModuleIcon = symRoundedMonitorWeight
-export const healthModuleIcon = symRoundedMonitorHeart
+export const healthModuleIcon = symRoundedHealthMetrics
+export const bodyModuleIcon = symRoundedStraighten
 export const labWorkModuleIcon = symRoundedLabs
 
 // Tables
@@ -104,6 +107,7 @@ export const chartsIcon = symRoundedMonitoring
 export const checkIcon = symRoundedCheck
 export const lockIcon = symRoundedLock
 export const unlockIcon = symRoundedLockOpenRight
+export const openDialogIcon = symRoundedOpenInNew
 
 // Design Elements
 export const menuIcon = symRoundedMenu
