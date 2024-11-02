@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/shared/enums'
-import { examplesPageIcon, settingsPageIcon } from '@/shared/icons'
+import {
+    exercisesPageIcon,
+    measurementsPageIcon,
+    plansPageIcon,
+    settingsPageIcon,
+    workoutsPageIcon,
+} from '@/shared/icons'
 import { useQuasar } from 'quasar'
 import { computed } from 'vue'
 import { RouterView } from 'vue-router'
@@ -15,11 +21,38 @@ const isDesktop = computed(() => $q.screen.gt.xs)
             <q-tabs class="text-caption" active-color="yellow" outside-arrows mobile-arrows>
                 <q-route-tab
                     no-caps
-                    :icon="examplesPageIcon"
+                    :icon="plansPageIcon"
                     exact
-                    :to="{ name: RouteNameEnum.EXAMPLES_DASHBOARD }"
+                    :to="{ name: RouteNameEnum.PLANS_DASHBOARD }"
                 >
-                    <template v-if="isDesktop">Examples</template>
+                    <template v-if="isDesktop">Plans</template>
+                </q-route-tab>
+
+                <q-route-tab
+                    no-caps
+                    :icon="workoutsPageIcon"
+                    exact
+                    :to="{ name: RouteNameEnum.WORKOUTS_DASHBOARD }"
+                >
+                    <template v-if="isDesktop">Workouts</template>
+                </q-route-tab>
+
+                <q-route-tab
+                    no-caps
+                    :icon="exercisesPageIcon"
+                    exact
+                    :to="{ name: RouteNameEnum.EXERCISES_DASHBOARD }"
+                >
+                    <template v-if="isDesktop">Exercises</template>
+                </q-route-tab>
+
+                <q-route-tab
+                    no-caps
+                    :icon="measurementsPageIcon"
+                    exact
+                    :to="{ name: RouteNameEnum.MEASUREMENTS_DASHBOARD }"
+                >
+                    <template v-if="isDesktop">Measurements</template>
                 </q-route-tab>
 
                 <q-route-tab

@@ -25,11 +25,23 @@ export function createId(table: TableEnum) {
         case TableEnum.LOGS:
             prefix = 'log'
             break
-        case TableEnum.EXAMPLES:
+        case TableEnum.PLANS:
+            prefix = 'pla'
+            break
+        case TableEnum.WORKOUTS:
+            prefix = 'wop'
+            break
+        case TableEnum.WORKOUT_RESULTS:
+            prefix = 'wor'
+            break
+        case TableEnum.EXERCISES:
             prefix = 'exp'
             break
-        case TableEnum.EXAMPLE_RESULTS:
+        case TableEnum.EXERCISE_RESULTS:
             prefix = 'exr'
+            break
+        case TableEnum.MEASUREMENTS:
+            prefix = 'mea'
             break
     }
 

@@ -1,45 +1,43 @@
-import DialogChartActivityExampleResults from '@/components/dialogs/chart/DialogChartActivityExampleResults.vue'
+import DialogChartActivityWorkoutResults from '@/components/dialogs/chart/DialogChartActivityWorkoutResults.vue'
 import DialogCreate from '@/components/dialogs/DialogCreate.vue'
 import DialogDelete from '@/components/dialogs/DialogDelete.vue'
 import DialogEdit from '@/components/dialogs/DialogEdit.vue'
 import DialogInspect from '@/components/dialogs/DialogInspect.vue'
 import FormItemCreatedDate from '@/components/dialogs/forms/FormItemCreatedDate.vue'
 import FormItemId from '@/components/dialogs/forms/FormItemId.vue'
-import FormItemMockData from '@/components/dialogs/forms/FormItemMockData.vue'
 import FormItemNote from '@/components/dialogs/forms/FormItemNote.vue'
 import FormItemParentId from '@/components/dialogs/forms/FormItemParentId.vue'
 import InspectItemDate from '@/components/dialogs/inspect/InspectItemDate.vue'
 import InspectItemList from '@/components/dialogs/inspect/InspectItemList.vue'
 import InspectItemString from '@/components/dialogs/inspect/InspectItemString.vue'
-import { ExampleResult, exampleResultSchema } from '@/models/ExampleResult'
-import { DurationMSEnum, TableEnum } from '@/shared/enums'
+import { WorkoutResult, workoutResultSchema } from '@/models/WorkoutResult'
+import { TableEnum } from '@/shared/enums'
 import { databaseIcon } from '@/shared/icons'
 import type { IdType, ServiceType } from '@/shared/types'
 import { hiddenTableColumn, tableColumn } from '@/shared/utils'
 import type { QDialogOptions } from 'quasar'
 import { BaseService } from './BaseService'
-import { ExampleService } from './ExampleService'
+import { WorkoutService } from './WorkoutService'
 
-export class ExampleResultService extends BaseService {
+export class WorkoutResultService extends BaseService {
     public constructor() {
         super()
     }
 
-    labelSingular = 'Example Result'
-    labelPlural = 'Example Results'
+    labelSingular = 'Workout Result'
+    labelPlural = 'Workout Results'
     displayIcon = databaseIcon
     tableIcon = databaseIcon
-    modelSchema = exampleResultSchema
-    parentTable = TableEnum.EXAMPLES
-    table = TableEnum.EXAMPLE_RESULTS
+    modelSchema = workoutResultSchema
+    parentTable = TableEnum.WORKOUTS
+    table = TableEnum.WORKOUT_RESULTS
     childTable = null!
     tableColumns = [
         hiddenTableColumn('id'),
         tableColumn('id', 'Id', 'UUID'),
         tableColumn('createdAt', 'Created Date', 'DATE'),
-        tableColumn('parentId', 'Parent Example Id', 'UUID'), // Parent is Example
+        tableColumn('parentId', 'Parent Workout Id', 'UUID'),
         tableColumn('note', 'Note', 'TEXT'),
-        tableColumn('mockData', 'Mock Data'),
         tableColumn('status', 'Status', 'LIST-PRINT'),
     ]
     supportsColumnFilters = true
@@ -54,7 +52,7 @@ export class ExampleResultService extends BaseService {
      * Returns the parent service for this child service.
      */
     parentService(): ServiceType {
-        return ExampleService.instance()
+        return WorkoutService.instance()
     }
 
     /**
@@ -62,7 +60,7 @@ export class ExampleResultService extends BaseService {
      * @example $q.dialog(service.activityChartsDialogOptions(id))
      */
     activityChartsDialogOptions(): QDialogOptions {
-        return { component: DialogChartActivityExampleResults }
+        return { component: DialogChartActivityWorkoutResults }
     }
 
     /**
@@ -93,10 +91,7 @@ export class ExampleResultService extends BaseService {
                         component: InspectItemList,
                         props: { label: 'Status', recordKey: 'status' },
                     },
-                    {
-                        component: InspectItemString,
-                        props: { label: 'Mock Data', recordKey: 'mockData' },
-                    },
+                    // TODO
                 ],
             },
         }
@@ -107,12 +102,12 @@ export class ExampleResultService extends BaseService {
      * @example $q.dialog(service.createDialogOptions())
      */
     createDialogOptions(parentId?: IdType): QDialogOptions {
-        let record: ExampleResult = null!
+        let record: WorkoutResult = null!
 
         if (parentId) {
-            record = new ExampleResult({ parentId })
+            record = new WorkoutResult({ parentId })
         } else {
-            record = new ExampleResult({ parentId: undefined! })
+            record = new WorkoutResult({ parentId: undefined! })
         }
 
         return {
@@ -125,7 +120,7 @@ export class ExampleResultService extends BaseService {
                     { component: FormItemParentId, props: { parentService: this.parentService() } },
                     { component: FormItemCreatedDate },
                     { component: FormItemNote },
-                    { component: FormItemMockData },
+                    // TODO
                 ],
             },
         }
@@ -146,7 +141,7 @@ export class ExampleResultService extends BaseService {
                     { component: FormItemParentId, props: { parentService: this.parentService() } },
                     { component: FormItemCreatedDate },
                     { component: FormItemNote },
-                    { component: FormItemMockData },
+                    // TODO
                 ],
             },
         }
@@ -169,50 +164,17 @@ export class ExampleResultService extends BaseService {
 
     /**
      * Returns chart datasets for the record associated with a parent.
+     * TODO: Implement for charts.
      */
     async getChartDatasets(parentId: IdType) {
-        const allExampleResults = await this.db
-            .table(TableEnum.EXAMPLE_RESULTS)
-            .where('parentId')
-            .equals(parentId)
-            .sortBy('createdAt')
-
-        const now = Date.now()
-        const threeMonthsAgo = now - DurationMSEnum['Three Months']
-        const oneYearAgo = now - DurationMSEnum['One Year']
-
-        const exampleResultsThreeMonths = allExampleResults.filter(
-            (record) => record.createdAt > threeMonthsAgo,
-        )
-        const exampleResultsOneYear = allExampleResults.filter(
-            (record) => record.createdAt > oneYearAgo,
-        )
-
-        const allCount = allExampleResults.length
-        const threeMonthCount = exampleResultsThreeMonths.length
-        const oneYearCount = exampleResultsOneYear.length
-
-        // Determine if there are records beyond the three month and one year thresholds
-        const hasRecords = allCount > 0
-        const hasRecordsBeyondThreeMonths = allCount - threeMonthCount > 0
-        const hasRecordsBeyondOneYear = allCount - oneYearCount > 0
-
+        console.log('getChartDatasets', parentId)
         return {
-            threeMonths: exampleResultsThreeMonths.map((record) => ({
-                x: record.createdAt,
-                y: record.mockData,
-            })),
-            oneYear: exampleResultsOneYear.map((record) => ({
-                x: record.createdAt,
-                y: record.mockData,
-            })),
-            allTime: allExampleResults.map((record) => ({
-                x: record.createdAt,
-                y: record.mockData,
-            })),
-            hasRecords,
-            hasRecordsBeyondThreeMonths,
-            hasRecordsBeyondOneYear,
+            threeMonths: [],
+            oneYear: [],
+            allTime: [],
+            hasRecords: false,
+            hasRecordsBeyondThreeMonths: false,
+            hasRecordsBeyondOneYear: false,
         }
     }
 }
@@ -220,4 +182,4 @@ export class ExampleResultService extends BaseService {
 /**
  * Singleton instance exported for convenience.
  */
-export const ExampleResultServInst = ExampleResultService.instance()
+export const WorkoutResultServInst = WorkoutResultService.instance()

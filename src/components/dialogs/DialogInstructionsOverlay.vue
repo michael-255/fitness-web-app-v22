@@ -3,10 +3,10 @@ import { SettingIdEnum } from '@/models/Setting'
 import { SettingServInst } from '@/services/SettingService'
 import { appDescription, appName } from '@/shared/constants'
 import {
+    checkIcon,
     databaseIcon,
     donatePageIcon,
     downIcon,
-    examplesPageIcon,
     recommendIcon,
     settingsPageIcon,
 } from '@/shared/icons'
@@ -63,7 +63,7 @@ async function goToDonate() {
 
                 <p>
                     <q-btn
-                        :icon="examplesPageIcon"
+                        :icon="checkIcon"
                         label="Examples"
                         color="primary"
                         size="sm"

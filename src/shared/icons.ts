@@ -3,6 +3,7 @@ import {
     symRoundedAdd,
     symRoundedAddCircle,
     symRoundedArrowForward,
+    symRoundedAssignment,
     symRoundedBugReport,
     symRoundedCalendarToday,
     symRoundedCancel,
@@ -19,16 +20,20 @@ import {
     symRoundedError,
     symRoundedEventAvailable,
     symRoundedFeatureSearch,
+    symRoundedFitnessCenter,
     symRoundedInfo,
     symRoundedKeyboardArrowDown,
     symRoundedKeyboardArrowUp,
+    symRoundedLabs,
     symRoundedLanguage,
     symRoundedLibraryAdd,
     symRoundedLock,
     symRoundedLockOpenRight,
     symRoundedManageSearch,
     symRoundedMenu,
+    symRoundedMonitorHeart,
     symRoundedMonitoring,
+    symRoundedMonitorWeight,
     symRoundedMoreVert,
     symRoundedPublish,
     symRoundedRecommend,
@@ -38,9 +43,10 @@ import {
     symRoundedSearch,
     symRoundedSettings,
     symRoundedSettingsApplications,
-    symRoundedSmartToy,
     symRoundedStat2,
     symRoundedStickyNote2,
+    symRoundedStraighten,
+    symRoundedTactic,
     symRoundedTune,
     symRoundedViewWeek,
     symRoundedWarning,
@@ -61,7 +67,13 @@ export const errorIcon = symRoundedError
 // Pages (Views)
 export const donatePageIcon = symRoundedRedeem
 export const settingsPageIcon = symRoundedSettings
-export const examplesPageIcon = symRoundedSmartToy
+export const plansPageIcon = symRoundedTactic
+export const workoutsPageIcon = symRoundedAssignment
+export const exercisesPageIcon = symRoundedFitnessCenter
+export const measurementsPageIcon = symRoundedStraighten
+export const dietWeightModuleIcon = symRoundedMonitorWeight
+export const healthModuleIcon = symRoundedMonitorHeart
+export const labWorkModuleIcon = symRoundedLabs
 
 // Tables
 export const logsTableIcon = symRoundedFeatureSearch

@@ -1,5 +1,5 @@
-import DialogChartActivityExamples from '@/components/dialogs/chart/DialogChartActivityExamples.vue'
-import DialogChartExample from '@/components/dialogs/chart/DialogChartExample.vue'
+import DialogChartActivityWorkouts from '@/components/dialogs/chart/DialogChartActivityWorkouts.vue'
+import DialogChartWorkout from '@/components/dialogs/chart/DialogChartWorkout.vue'
 import DialogCreate from '@/components/dialogs/DialogCreate.vue'
 import DialogDelete from '@/components/dialogs/DialogDelete.vue'
 import DialogEdit from '@/components/dialogs/DialogEdit.vue'
@@ -14,27 +14,27 @@ import InspectItemDate from '@/components/dialogs/inspect/InspectItemDate.vue'
 import InspectItemList from '@/components/dialogs/inspect/InspectItemList.vue'
 import InspectItemObject from '@/components/dialogs/inspect/InspectItemObject.vue'
 import InspectItemString from '@/components/dialogs/inspect/InspectItemString.vue'
-import { Example, exampleSchema } from '@/models/Example'
+import { Workout, workoutSchema } from '@/models/Workout'
 import { TableEnum } from '@/shared/enums'
-import { dataTableIcon, examplesPageIcon } from '@/shared/icons'
+import { databaseIcon, workoutsPageIcon } from '@/shared/icons'
 import type { IdType } from '@/shared/types'
 import { hiddenTableColumn, tableColumn } from '@/shared/utils'
 import type { QDialogOptions } from 'quasar'
 import { BaseService } from './BaseService'
 
-export class ExampleService extends BaseService {
+export class WorkoutService extends BaseService {
     public constructor() {
         super()
     }
 
-    labelSingular = 'Example'
-    labelPlural = 'Examples'
-    displayIcon = examplesPageIcon
-    tableIcon = dataTableIcon
-    modelSchema = exampleSchema
+    labelSingular = 'Workout'
+    labelPlural = 'Workouts'
+    displayIcon = workoutsPageIcon
+    tableIcon = databaseIcon
+    modelSchema = workoutSchema
     parentTable = null!
-    table = TableEnum.EXAMPLES
-    childTable = TableEnum.EXAMPLE_RESULTS
+    table = TableEnum.WORKOUTS
+    childTable = TableEnum.WORKOUT_RESULTS
     tableColumns = [
         hiddenTableColumn('id'),
         tableColumn('id', 'Id', 'UUID'),
@@ -42,7 +42,11 @@ export class ExampleService extends BaseService {
         tableColumn('name', 'Name', 'TEXT'),
         tableColumn('desc', 'Description', 'TEXT'),
         tableColumn('status', 'Status', 'LIST-PRINT'),
-        tableColumn('lastChild', 'Last Example Result', 'JSON'),
+        tableColumn('lastChild', 'Last Workout Result', 'JSON'),
+        tableColumn('warmupGroups', 'Warmup Exercises', 'JSON'),
+        tableColumn('exerciseGroups', 'Main Exercises', 'JSON'),
+        tableColumn('cooldownGroups', 'Cooldown Exercises', 'JSON'),
+        tableColumn('nextWorkoutIds', 'Next records', 'LIST-PRINT'),
     ]
     supportsColumnFilters = true
     supportsActivityCharts = true
@@ -57,7 +61,7 @@ export class ExampleService extends BaseService {
      * @example $q.dialog(service.activityChartsDialogOptions(id))
      */
     activityChartsDialogOptions(): QDialogOptions {
-        return { component: DialogChartActivityExamples }
+        return { component: DialogChartActivityWorkouts }
     }
 
     /**
@@ -66,7 +70,7 @@ export class ExampleService extends BaseService {
      */
     chartsDialogOptions(id: IdType): QDialogOptions {
         return {
-            component: DialogChartExample,
+            component: DialogChartWorkout,
             componentProps: {
                 id,
                 service: this,
@@ -104,8 +108,9 @@ export class ExampleService extends BaseService {
                     },
                     {
                         component: InspectItemObject,
-                        props: { label: 'Last Example Result', recordKey: 'lastChild' },
+                        props: { label: 'Last Workout Result', recordKey: 'lastChild' },
                     },
+                    // TODO
                 ],
             },
         }
@@ -120,13 +125,14 @@ export class ExampleService extends BaseService {
             component: DialogCreate,
             componentProps: {
                 service: this,
-                initialRecord: new Example({}),
+                initialRecord: new Workout({}),
                 formComponents: [
                     { component: FormItemId },
                     { component: FormItemCreatedDate },
                     { component: FormItemName },
                     { component: FormItemDescription },
                     { component: FormItemStatus },
+                    // TODO
                 ],
             },
         }
@@ -148,6 +154,7 @@ export class ExampleService extends BaseService {
                     { component: FormItemName },
                     { component: FormItemDescription },
                     { component: FormItemStatus },
+                    // TODO
                 ],
             },
         }
@@ -186,4 +193,4 @@ export class ExampleService extends BaseService {
 /**
  * Singleton instance exported for convenience.
  */
-export const ExampleServInst = ExampleService.instance()
+export const WorkoutServInst = WorkoutService.instance()

@@ -1,7 +1,11 @@
-import type { ExampleType } from '@/models/Example'
-import type { ExampleResultType } from '@/models/ExampleResult'
+import type { ExerciseType } from '@/models/Exercise'
+import type { ExerciseResultType } from '@/models/ExerciseResult'
 import type { LogType } from '@/models/Log'
+import type { MeasurementType } from '@/models/Measurements'
+import type { PlanType } from '@/models/Plan'
 import type { SettingType } from '@/models/Setting'
+import type { WorkoutType } from '@/models/Workout'
+import type { WorkoutResultType } from '@/models/WorkoutResult'
 import type { BaseService } from '@/services/BaseService'
 import type { Component } from 'vue'
 import { z } from 'zod'
@@ -49,8 +53,12 @@ export type BackupType = {
     createdAt: TimestampType
     settings: SettingType[]
     logs: LogType[]
-    examples: ExampleType[]
-    exampleResults: ExampleResultType[]
+    plans: PlanType[]
+    measurements: MeasurementType[]
+    workouts: WorkoutType[]
+    workoutResults: WorkoutResultType[]
+    exercises: ExerciseType[]
+    exerciseResults: ExerciseResultType[]
 }
 
 //

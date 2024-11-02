@@ -1,7 +1,7 @@
 {
-    "name": "web-app-template-v5",
-    "description": "Web App Template is a foundation for building web apps with Vue 3, TypeScript, and Quasar 2.",
-    "version": "5.0.0",
+    "name": "fitness-web-app-v22",
+    "description": "Fitness Tracker is an app designed to help you achieve your fitness goals. It offers a variety of features to track and enhance your workouts, exercises, and overall fitness journey.",
+    "version": "22.0.0",
     "private": true,
     "scripts": {
         "dev": "vite",
@@ -60,10 +60,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/michael-255/web-app-template-v5.git"
+        "url": "git+https://github.com/michael-255/fitness-web-app-v22.git"
     },
     "bugs": {
-        "url": "https://github.com/michael-255/web-app-template-v5/issues"
+        "url": "https://github.com/michael-255/fitness-web-app-v22/issues"
     },
-    "homepage": "https://github.com/michael-255/web-app-template-v5#readme"
+    "homepage": "https://github.com/michael-255/fitness-web-app-v22#readme"
 }

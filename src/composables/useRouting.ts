@@ -1,8 +1,12 @@
 import useLogger from '@/composables/useLogger'
-import { ExampleResultServInst } from '@/services/ExampleResultService'
-import { ExampleServInst } from '@/services/ExampleService'
+import { ExerciseResultServInst } from '@/services/ExerciseResultService'
+import { ExerciseServInst } from '@/services/ExerciseService'
 import { LogServInst } from '@/services/LogService'
+import { MeasurementServInst } from '@/services/MeasurementService'
+import { PlanServInst } from '@/services/PlanService'
 import { SettingServInst } from '@/services/SettingService'
+import { WorkoutResultServInst } from '@/services/WorkoutResultService'
+import { WorkoutServInst } from '@/services/WorkoutService'
 import { RouteNameEnum, TableEnum } from '@/shared/enums'
 import type { ServiceType } from '@/shared/types'
 import { useRoute, useRouter } from 'vue-router'
@@ -28,11 +32,23 @@ export default function useRouting() {
         case TableEnum.LOGS:
             routeService = LogServInst
             break
-        case TableEnum.EXAMPLES:
-            routeService = ExampleServInst
+        case TableEnum.PLANS:
+            routeService = PlanServInst
             break
-        case TableEnum.EXAMPLE_RESULTS:
-            routeService = ExampleResultServInst
+        case TableEnum.WORKOUTS:
+            routeService = WorkoutServInst
+            break
+        case TableEnum.WORKOUT_RESULTS:
+            routeService = WorkoutResultServInst
+            break
+        case TableEnum.EXERCISES:
+            routeService = ExerciseServInst
+            break
+        case TableEnum.EXERCISE_RESULTS:
+            routeService = ExerciseResultServInst
+            break
+        case TableEnum.MEASUREMENTS:
+            routeService = MeasurementServInst
             break
     }
 

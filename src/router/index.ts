@@ -1,5 +1,8 @@
 import LayoutMenu from '@/layouts/LayoutMenu.vue'
-import PageDashboardExamples from '@/pages/PageDashboardExamples.vue'
+import PageDashboardExercises from '@/pages/PageDashboardExercises.vue'
+import PageDashboardMeasurements from '@/pages/PageDashboardMeasurements.vue'
+import PageDashboardPlans from '@/pages/PageDashboardPlans.vue'
+import PageDashboardWorkouts from '@/pages/PageDashboardWorkouts.vue'
 import PageTable from '@/pages/PageTable.vue'
 import { RouteNameEnum } from '@/shared/enums'
 import { tableSchema } from '@/shared/schemas'
@@ -11,14 +14,29 @@ const router = createRouter({
         // Dashboard components are more unique and will likely need dedicated routes
         {
             path: '/',
-            redirect: `/examples-dashboard`, // Your default route
+            redirect: `/plans-dashboard`, // Your default route
             name: RouteNameEnum.MENU_LAYOUT,
             component: LayoutMenu, // Must use a different layout for other primary routes
             children: [
                 {
-                    path: '/examples-dashboard',
-                    name: RouteNameEnum.EXAMPLES_DASHBOARD,
-                    component: PageDashboardExamples,
+                    path: '/plans-dashboard',
+                    name: RouteNameEnum.PLANS_DASHBOARD,
+                    component: PageDashboardPlans,
+                },
+                {
+                    path: '/workouts-dashboard',
+                    name: RouteNameEnum.WORKOUTS_DASHBOARD,
+                    component: PageDashboardWorkouts,
+                },
+                {
+                    path: '/exercises-dashboard',
+                    name: RouteNameEnum.EXERCISES_DASHBOARD,
+                    component: PageDashboardExercises,
+                },
+                {
+                    path: '/measurements-dashboard',
+                    name: RouteNameEnum.MEASUREMENTS_DASHBOARD,
+                    component: PageDashboardMeasurements,
                 },
                 {
                     path: '/settings',

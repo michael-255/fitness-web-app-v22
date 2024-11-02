@@ -3,7 +3,10 @@
  */
 export enum RouteNameEnum {
     MENU_LAYOUT = 'MenuLayout',
-    EXAMPLES_DASHBOARD = 'ExamplesDashboard',
+    PLANS_DASHBOARD = 'PlansDashboard',
+    WORKOUTS_DASHBOARD = 'WorkoutsDashboard',
+    EXERCISES_DASHBOARD = 'ExercisesDashboard',
+    MEASUREMENTS_DASHBOARD = 'MeasurementsDashboard',
     TABLE = 'Table',
     SETTINGS = 'Settings',
     ABOUT = 'About',
@@ -17,8 +20,12 @@ export enum RouteNameEnum {
 export enum TableEnum {
     SETTINGS = 'settings', // Standalone
     LOGS = 'logs', // Standalone
-    EXAMPLES = 'examples', // Parent
-    EXAMPLE_RESULTS = 'example-results', // Child
+    PLANS = 'plans', // Standalone
+    MEASUREMENTS = 'measurements', // Standalone
+    WORKOUTS = 'workouts', // Parent
+    WORKOUT_RESULTS = 'workout-results', // Child
+    EXERCISES = 'exercises', // Parent
+    EXERCISE_RESULTS = 'exercise-results', // Child
 }
 
 /**
@@ -33,6 +40,23 @@ export enum StatusEnum {
 export enum LimitEnum {
     MAX_TEXT_AREA = 300,
     MAX_TEXT_LINE = 50,
+    MAX_SETS = 30,
+    MAX_WEIGHT = 9_999,
+    MAX_REPS = 9_999,
+    MAX_RPE = 10,
+    MIN_REST_TIMER = 30, // 30 seconds
+    MAX_REST_TIMER = 900, // 15 minutes
+    MAX_DURATION_SEC = 359_999, // 99 hours 59 minutes 59 seconds
+    MAX_CALORIES_BURNED = 9_999,
+    MAX_CALORIES = 99_999,
+    MAX_NUTRITION = 9_999,
+    MAX_BODY_WEIGHT = 9_999,
+    MIN_TEMPERATURE = 60,
+    MAX_TEMPERATURE = 115,
+    MAX_BODY_MEASUREMENT = 999,
+    MIN_BLOOD_PRESSURE = 30,
+    MAX_BLOOD_PRESSURE = 300,
+    MAX_CHOLESTEROL = 999,
 }
 
 export enum DurationEnum {

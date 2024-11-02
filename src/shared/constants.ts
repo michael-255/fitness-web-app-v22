@@ -1,9 +1,11 @@
-export const appDatabaseVersion = '5.0.0'
+export const appDatabaseVersion = '22.0.0'
 
-export const appName = 'Web App Template'
+export const appName = 'Fitness Tracker'
 
 export const appDescription = `
-${appName} is a foundation for building web apps with Vue 3, TypeScript, and Quasar 2.
+${appName} is a comprehensive and user-friendly app designed to help you achieve your fitness
+goals. With a clean and intuitive interface, it offers a variety of features to track and enhance
+your workouts, exercises, and overall fitness journey.
 `
 
 export const displayDateFormat = 'ddd, YYYY MMM Do, h:mm A' // Sun, 2024 Sep 1st, 12:17 PM

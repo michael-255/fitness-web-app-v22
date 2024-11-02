@@ -4,16 +4,18 @@ import PageFabMenu from '@/components/page/PageFabMenu.vue'
 import PageHeading from '@/components/page/PageHeading.vue'
 import PageResponsive from '@/components/page/PageResponsive.vue'
 import useLogger from '@/composables/useLogger'
-import { Example } from '@/models/Example'
-import { ExampleResult } from '@/models/ExampleResult'
 import { SettingIdEnum } from '@/models/Setting'
 import { DB } from '@/services/db'
-import { ExampleResultServInst } from '@/services/ExampleResultService'
-import { ExampleServInst } from '@/services/ExampleService'
+import { ExerciseResultServInst } from '@/services/ExerciseResultService'
+import { ExerciseServInst } from '@/services/ExerciseService'
 import { LogServInst } from '@/services/LogService'
+import { MeasurementServInst } from '@/services/MeasurementService'
+import { PlanServInst } from '@/services/PlanService'
 import { SettingServInst } from '@/services/SettingService'
+import { WorkoutResultServInst } from '@/services/WorkoutResultService'
+import { WorkoutServInst } from '@/services/WorkoutService'
 import { appDatabaseVersion, appName } from '@/shared/constants'
-import { DurationEnum, DurationMSEnum, RouteNameEnum, TableEnum } from '@/shared/enums'
+import { DurationEnum, RouteNameEnum, TableEnum } from '@/shared/enums'
 import {
     createIcon,
     databaseIcon,
@@ -31,7 +33,6 @@ import {
     warnIcon,
 } from '@/shared/icons'
 import type { BackupType } from '@/shared/types'
-import { compactDateFromMs } from '@/shared/utils'
 import { useSettingsStore } from '@/stores/settings'
 import { exportFile, useMeta, useQuasar } from 'quasar'
 import { ref, type Ref } from 'vue'
@@ -90,25 +91,41 @@ function onImportBackup() {
 
             const settingsImport = await SettingServInst.importData(backup?.settings ?? [])
             const logsImport = await LogServInst.importData(backup?.logs ?? [])
-            const examplesImport = await ExampleServInst.importData(backup?.examples ?? [])
-            const exampleResultsImport = await ExampleResultServInst.importData(
-                backup?.exampleResults ?? [],
+            const exercisesImport = await ExerciseServInst.importData(backup?.exercises ?? [])
+            const exerciseResultsImport = await ExerciseResultServInst.importData(
+                backup?.exerciseResults ?? [],
             )
+            const workoutsImport = await WorkoutServInst.importData(backup?.workouts ?? [])
+            const workoutResultsImport = await WorkoutResultServInst.importData(
+                backup?.workoutResults ?? [],
+            )
+            const measurementsImport = await MeasurementServInst.importData(
+                backup?.measurements ?? [],
+            )
+            const plansImport = await PlanServInst.importData(backup?.plans ?? [])
 
             // Check for invalid records
             const hasInvalidRecords = [
                 settingsImport.invalidRecords,
                 logsImport.invalidRecords,
-                examplesImport.invalidRecords,
-                exampleResultsImport.invalidRecords,
+                exercisesImport.invalidRecords,
+                exerciseResultsImport.invalidRecords,
+                workoutsImport.invalidRecords,
+                workoutResultsImport.invalidRecords,
+                measurementsImport.invalidRecords,
+                plansImport.invalidRecords,
             ].some((record) => Array.isArray(record) && record.length > 0)
 
             if (hasInvalidRecords) {
                 log.warn('Import skipping invalid records', {
                     invalidSettings: settingsImport.invalidRecords,
                     invalidLogs: logsImport.invalidRecords,
-                    invalidExamples: examplesImport.invalidRecords,
-                    invalidExampleResults: exampleResultsImport.invalidRecords,
+                    invalidExercises: exercisesImport.invalidRecords,
+                    invalidExerciseResults: exerciseResultsImport.invalidRecords,
+                    invalidWorkouts: workoutsImport.invalidRecords,
+                    invalidWorkoutResults: workoutResultsImport.invalidRecords,
+                    invalidMeasurements: measurementsImport.invalidRecords,
+                    invalidPlans: plansImport.invalidRecords,
                 })
             }
 
@@ -116,16 +133,24 @@ function onImportBackup() {
             const hasBulkErrors = [
                 // Settings can't have bulk errors
                 logsImport.bulkError,
-                examplesImport.bulkError,
-                exampleResultsImport.bulkError,
+                exercisesImport.bulkError,
+                exerciseResultsImport.bulkError,
+                workoutsImport.bulkError,
+                workoutResultsImport.bulkError,
+                measurementsImport.bulkError,
+                plansImport.bulkError,
             ].some((error) => error)
 
             if (hasBulkErrors) {
                 log.warn('Import skipping existing records', {
                     // Settings can't have bulk errors
                     logs: logsImport.bulkError,
-                    examples: examplesImport.bulkError,
-                    exampleResults: exampleResultsImport.bulkError,
+                    exercises: exercisesImport.bulkError,
+                    exerciseResults: exerciseResultsImport.bulkError,
+                    workouts: workoutsImport.bulkError,
+                    workoutResults: workoutResultsImport.bulkError,
+                    measurements: measurementsImport.bulkError,
+                    plans: plansImport.bulkError,
                 })
             }
 
@@ -135,8 +160,12 @@ function onImportBackup() {
                 databaseVersion: backup.databaseVersion,
                 settingsImported: settingsImport.importedCount,
                 logsImported: logsImport.importedCount,
-                examplesImported: examplesImport.importedCount,
-                exampleResultsImported: exampleResultsImport.importedCount,
+                exercisesImported: exercisesImport.importedCount,
+                exerciseResultsImported: exerciseResultsImport.importedCount,
+                workoutsImported: workoutsImport.importedCount,
+                workoutResultsImported: workoutResultsImport.importedCount,
+                measurementsImported: measurementsImport.importedCount,
+                plansImported: plansImport.importedCount,
             })
 
             importFile.value = null // Clear input
@@ -176,8 +205,12 @@ function onExportBackup() {
                 createdAt: Date.now(),
                 settings: await SettingServInst.exportData(),
                 logs: await LogServInst.exportData(),
-                examples: await ExampleServInst.exportData(),
-                exampleResults: await ExampleResultServInst.exportData(),
+                exercises: await ExerciseServInst.exportData(),
+                exerciseResults: await ExerciseResultServInst.exportData(),
+                workouts: await WorkoutServInst.exportData(),
+                workoutResults: await WorkoutResultServInst.exportData(),
+                measurements: await MeasurementServInst.exportData(),
+                plans: await PlanServInst.exportData(),
             }
 
             log.silentDebug('backup:', backup)
@@ -291,44 +324,45 @@ function onDeleteDatabase() {
  * Allows for the creation of test data when the app is in local DEV mode.
  */
 async function createTestData() {
-    // Example
-    const example = new Example({
-        name: `Generated: ${compactDateFromMs(Date.now())}`,
-        desc: 'This is an Example description. These descriptions can be quite long and detailed at 250 characters. Here is my attempt fill this space with text that makes sense. I want to see what this looks like when you are at the limit. This is enough.',
-    })
+    log.info('Must re-implment test data creation for this app')
+    // // Example
+    // const example = new Example({
+    //     name: `Generated: ${compactDateFromMs(Date.now())}`,
+    //     desc: 'This is an Example description. These descriptions can be quite long and detailed at 250 characters. Here is my attempt fill this space with text that makes sense. I want to see what this looks like when you are at the limit. This is enough.',
+    // })
 
-    // Example Results
-    const exampleResults = []
-    const numberOfDays = 600
-    const currentDate = Date.now()
+    // // Example Results
+    // const exampleResults = []
+    // const numberOfDays = 600
+    // const currentDate = Date.now()
 
-    // First record
-    const recentExampleResult = new ExampleResult({
-        parentId: example.id,
-        createdAt: currentDate,
-        note: 'This is the Example Result note. MOST RECENT!',
-        mockData: 0,
-    })
-    example.lastChild = recentExampleResult
-    exampleResults.push(recentExampleResult)
+    // // First record
+    // const recentExampleResult = new ExampleResult({
+    //     parentId: example.id,
+    //     createdAt: currentDate,
+    //     note: 'This is the Example Result note. MOST RECENT!',
+    //     mockData: 0,
+    // })
+    // example.lastChild = recentExampleResult
+    // exampleResults.push(recentExampleResult)
 
-    for (let i = 1; i < numberOfDays; i++) {
-        exampleResults.push(
-            new ExampleResult({
-                parentId: example.id,
-                createdAt: currentDate - i * DurationMSEnum['One Day'],
-                note: `This is the Example Result note: Index ${i}`,
-                mockData: Math.floor(Math.random() * (i / 2)) + i / 2,
-            }),
-        )
-    }
+    // for (let i = 1; i < numberOfDays; i++) {
+    //     exampleResults.push(
+    //         new ExampleResult({
+    //             parentId: example.id,
+    //             createdAt: currentDate - i * DurationMSEnum['One Day'],
+    //             note: `This is the Example Result note: Index ${i}`,
+    //             mockData: Math.floor(Math.random() * (i / 2)) + i / 2,
+    //         }),
+    //     )
+    // }
 
-    await ExampleServInst.addRecord(example)
-    await ExampleResultServInst.importData(exampleResults)
-    log.debug('Test Example added with debug', example)
-    log.warn('Test Example added with warn', example)
-    log.info('Test Example added with info', example)
-    log.error('Test Example added with error', example)
+    // await ExampleServInst.addRecord(example)
+    // await ExampleResultServInst.importData(exampleResults)
+    // log.debug('Test Example added with debug', example)
+    // log.warn('Test Example added with warn', example)
+    // log.info('Test Example added with info', example)
+    // log.error('Test Example added with error', example)
 }
 </script>
 
