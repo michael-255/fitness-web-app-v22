@@ -18,5 +18,5 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url)),
         },
     },
-    base: '/web-app-template-v5/',
+    base: '/fitness-web-app-v22/',
 })
