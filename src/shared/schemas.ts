@@ -1,3 +1,4 @@
+import { planIdSchema } from '@/models/Plan'
 import { settingIdSchema } from '@/models/Setting'
 import { z } from 'zod'
 import { LimitEnum, RouteNameEnum, StatusEnum, TableEnum } from './enums'
@@ -24,6 +25,8 @@ export const idSchema = z.string().refine(
             return true // uuid valid
         } else if (settingIdSchema.safeParse(id).success) {
             return true // setting id valid
+        } else if (planIdSchema.safeParse(id).success) {
+            return true // plan id valid
         } else {
             return false // invalid
         }

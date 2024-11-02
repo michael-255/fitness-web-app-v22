@@ -5,41 +5,26 @@ features to track and enhance your workouts, exercises, and overall fitness jour
 
 ## TODO
 
--   Implement the `Measurements` modules for it's Dashboard
+`Measurements`
 
-    -   Collect record types together based on the field
-    -   Only edit from the data tables
+-   Implement the `Measurements` modules first since measurement data is standalone
+-   Group together record types based on the field
+-   Only edit from the data tables
+-   Allow adding `notes` to records somehow
+-   Dialog and Chart creation will be needed for this
 
--   Implement basic `Plans`
+`Plans`
 
-    -   `Plans` are collections of ID watchers for record result to see if they are met
-    -   `Plans` work off of a set number of ID's to determine when they are watching for a result
-        -   `Monday` - Plans for each specific weekday
-        -   `Tuesday`
-        -   `Wednesday`
-        -   `Thursday`
-        -   `Friday`
-        -   `Saturday`
-        -   `Sunday`
-        -   `January` - Plans for each specific month
-        -   `February`
-        -   `March`
-        -   `April`
-        -   `May`
-        -   `June`
-        -   `July`
-        -   `August`
-        -   `September`
-        -   `October`
-        -   `November`
-        -   `December`
-        -   `Monthly` - Plans for every month
-        -   `Yearly` - Plans for every year
+-   They are collections of ID watchers for record result to see if they are met
+-   They work off of a set number of ID's to determine when they are watching for a result
+-   Determine how you want to store the tracked IDs on plans
+-   Determine how queries to see if the tracked IDs are met will work
 
--   `Workouts`
-    -   Install Vue Draggable Next `npm i -S vuedraggable@next`
-    -   `TEST` Vue Draggable Next on a page
-    -   Exercise groups will likely need to be updated to support this library
+`Workouts`
+
+-   Install Vue Draggable Next `npm i -S vuedraggable@next`
+-   `TEST` Vue Draggable Next on a page
+-   Exercise groups will likely need to be updated to support this library
 
 ```ts
 // But I don't want to save this data cause these labels could be changed
@@ -62,10 +47,6 @@ const data: ExerciseGroups = [
     ['test-111', 'test-222'], // C superset: Pull-up and Dips
 ]
 ```
-
--   `Measurements`
-    -   `Dashboard Modules`
-    -   `WIP`
 
 ## Post Cloning Steps
 
