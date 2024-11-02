@@ -10,18 +10,16 @@ import FormItemParentId from '@/components/dialogs/forms/FormItemParentId.vue'
 import InspectItemDate from '@/components/dialogs/inspect/InspectItemDate.vue'
 import InspectItemList from '@/components/dialogs/inspect/InspectItemList.vue'
 import InspectItemString from '@/components/dialogs/inspect/InspectItemString.vue'
-import { ExerciseResult, exerciseResultSchema } from '@/models/ExerciseResult'
+import { ExerciseResult } from '@/models/ExerciseResult'
 import { TableEnum } from '@/shared/enums'
 import { databaseIcon } from '@/shared/icons'
+import { exerciseResultSchema } from '@/shared/schemas'
 import type { IdType, ServiceType } from '@/shared/types'
 import { hiddenTableColumn, tableColumn } from '@/shared/utils'
 import type { QDialogOptions } from 'quasar'
 import { BaseService } from './BaseService'
 import { ExerciseService } from './ExerciseService'
 
-/**
- * Singleton class for managing most aspects of the Exercise Result model.
- */
 export class ExerciseResultService extends BaseService {
     public constructor() {
         super()

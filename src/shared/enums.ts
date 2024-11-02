@@ -1,4 +1,12 @@
 /**
+ * Defining in one file to reduce the likelyhood of circular dependencies.
+ */
+
+//
+// Shared
+//
+
+/**
  * Route names used by the router for page selection.
  */
 export enum RouteNameEnum {
@@ -91,4 +99,117 @@ export enum DurationMSEnum {
     'Three Years' = 94_608_000_000,
     'All Time' = Number.MAX_SAFE_INTEGER - 1, // So it doesn't match 'Forever'
     'Forever' = Number.MAX_SAFE_INTEGER,
+}
+
+//
+// Settings
+//
+
+/**
+ * The only valid IDs for settings in the application.
+ */
+export enum SettingIdEnum {
+    ADVANCED_MODE = 'Advanced Mode',
+    INSTRUCTIONS_OVERLAY = 'Instructions Overlay',
+    CONSOLE_LOGS = 'Console Logs',
+    INFO_MESSAGES = 'Info Messages',
+    LOG_RETENTION_DURATION = 'Log Rentention Duration',
+}
+
+//
+// Logs
+//
+
+export enum LogLevelEnum {
+    DEBUG = 'DEBUG',
+    INFO = 'INFO',
+    WARN = 'WARN',
+    ERROR = 'ERROR',
+}
+
+//
+// Measurements
+//
+
+export enum MeasurementFieldEnum {
+    // Diet & Weight
+    CALORIES = 'Calories',
+    CARBOHYDRATES = 'Carbohydrates',
+    FAT = 'Fat',
+    PROTEIN = 'Protein',
+    WEIGHT = 'Weight',
+    BODY_FAT = 'Body Fat',
+    // Health
+    TEMPERATURE = 'Temperature',
+    BLOOD_PRESSURE = 'Blood Pressure', // Systolic/Diastolic
+    BLOOD_OXYGEN = 'Blood Oxygen',
+    // Body
+    HEIGHT = 'Height', // Needed for BMI
+    NECK = 'Neck',
+    SHOULDERS = 'Shoulders',
+    CHEST = 'Chest',
+    WAIST = 'Waist',
+    HIPS = 'Hips',
+    LEFT_BICEP = 'Left Bicep',
+    RIGHT_BICEP = 'Right Bicep',
+    LEFT_FOREARM = 'Left Forearm',
+    RIGHT_FOREARM = 'Right Forearm',
+    LEFT_THIGH = 'Left Thigh',
+    RIGHT_THIGH = 'Right Thigh',
+    LEFT_CALF = 'Left Calf',
+    RIGHT_CALF = 'Right Calf',
+    // Lab Work
+    CHOLESTEROL = 'Cholesterol', // mg/dL
+    CHOLESTEROL_HDL = 'Cholesterol HDL', // mg/dL
+    CHOLESTEROL_LDL = 'Cholesterol LDL', // mg/dL
+    HEMOGLOBIN_A1C = 'Hemoglobin A1C', // Percent
+}
+
+//
+// Plans
+//
+
+/**
+ * The only valid IDs for plans in the application.
+ */
+export enum PlanIdEnum {
+    // Specific weekday recurring
+    MONDAY = 'Monday',
+    TUESDAY = 'Tuesday',
+    WEDNESDAY = 'Wednesday',
+    THURSDAY = 'Thursday',
+    FRIDAY = 'Friday',
+    SATURDAY = 'Saturday',
+    SUNDAY = 'Sunday',
+    // Specific month recurring
+    JANUARY = 'January',
+    FEBRUARY = 'February',
+    MARCH = 'March',
+    APRIL = 'April',
+    MAY = 'May',
+    JUNE = 'June',
+    JULY = 'July',
+    AUGUST = 'August',
+    SEPTEMBER = 'September',
+    OCTOBER = 'October',
+    NOVEMBER = 'November',
+    DECEMBER = 'December',
+    // Long term recurring
+    MONTHLY = 'Monthly',
+    YEARLY = 'Yearly',
+}
+
+//
+// Exercises
+//
+
+/**
+ * Used to determine the type of inputs available for an exercise.
+ */
+export enum ExerciseInputEnum {
+    CHECKLIST = 'Checklist', // Check boxes, all optional
+    CARDIO = 'Cardio Exercise', // Duration, Calories, RPE
+    WEIGHT = 'Weight Exercise', // Reps, Weight, RPE
+    SIDED_WEIGHT = 'Sided Weight Exercise', // Reps (R/L), Weight (R/L), RPE (R/L)
+    CLIMBING_SESSION = 'Climbing Session',
 }

@@ -4,7 +4,6 @@ import PageFabMenu from '@/components/page/PageFabMenu.vue'
 import PageHeading from '@/components/page/PageHeading.vue'
 import PageResponsive from '@/components/page/PageResponsive.vue'
 import useLogger from '@/composables/useLogger'
-import { SettingIdEnum } from '@/models/Setting'
 import { DB } from '@/services/db'
 import { ExerciseResultServInst } from '@/services/ExerciseResultService'
 import { ExerciseServInst } from '@/services/ExerciseService'
@@ -15,7 +14,7 @@ import { SettingServInst } from '@/services/SettingService'
 import { WorkoutResultServInst } from '@/services/WorkoutResultService'
 import { WorkoutServInst } from '@/services/WorkoutService'
 import { appDatabaseVersion, appName } from '@/shared/constants'
-import { DurationEnum, RouteNameEnum, TableEnum } from '@/shared/enums'
+import { DurationEnum, RouteNameEnum, SettingIdEnum, TableEnum } from '@/shared/enums'
 import {
     createIcon,
     databaseIcon,

@@ -1,6 +1,6 @@
-import { planSchema } from '@/models/Plan'
 import { TableEnum } from '@/shared/enums'
 import { calendarCheckIcon, databaseIcon } from '@/shared/icons'
+import { planSchema } from '@/shared/schemas'
 import { hiddenTableColumn, tableColumn } from '@/shared/utils'
 import { BaseService } from './BaseService'
 
