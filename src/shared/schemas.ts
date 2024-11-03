@@ -122,7 +122,8 @@ export const measurementSchema = z.object({
     carbs: nutritionSchema.optional(),
     fat: nutritionSchema.optional(),
     protein: nutritionSchema.optional(),
-    weight: bodyWeightSchema.optional(),
+    // Weight
+    bodyWeight: bodyWeightSchema.optional(),
     bodyFat: percentSchema.optional(),
     // Health
     temperature: temperatureSchema.optional(),

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DialogMeasurementsDietWeight from '@/components/dialogs/measurements/DialogMeasurementsDietWeight.vue'
+import DialogMeasurementsDietModule from '@/components/dialogs/measurements/DialogMeasurementsDietModule.vue'
 import PageFabMenu from '@/components/page/PageFabMenu.vue'
 import PageHeading from '@/components/page/PageHeading.vue'
 import PageResponsive from '@/components/page/PageResponsive.vue'
@@ -10,10 +10,11 @@ import {
     addIcon,
     bodyModuleIcon,
     chartsIcon,
-    dietWeightModuleIcon,
+    dietModuleIcon,
     healthModuleIcon,
     labWorkModuleIcon,
     measurementsPageIcon,
+    weightModuleIcon,
 } from '@/shared/icons'
 import { useMeta, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
@@ -59,7 +60,7 @@ const router = useRouter()
                     <q-card>
                         <q-item class="q-mt-sm">
                             <q-item-section top>
-                                <q-item-label class="text-h5"> Diet & Weight </q-item-label>
+                                <q-item-label class="text-h5"> Diet </q-item-label>
                             </q-item-section>
 
                             <q-item-section top side>
@@ -93,11 +94,63 @@ const router = useRouter()
                                 color="primary"
                                 label="Access Module"
                                 class="full-width"
-                                :icon="dietWeightModuleIcon"
+                                :icon="dietModuleIcon"
                                 @click="
                                     () =>
                                         $q.dialog({
-                                            component: DialogMeasurementsDietWeight,
+                                            component: DialogMeasurementsDietModule,
+                                        })
+                                "
+                            />
+                        </q-card-actions>
+                    </q-card>
+                </q-item-section>
+            </q-item>
+
+            <q-item>
+                <q-item-section>
+                    <q-card>
+                        <q-item class="q-mt-sm">
+                            <q-item-section top>
+                                <q-item-label class="text-h5"> Weight </q-item-label>
+                            </q-item-section>
+
+                            <q-item-section top side>
+                                <div class="row">
+                                    <q-btn
+                                        :disable="$q.loading.isActive"
+                                        class="btn-translation"
+                                        flat
+                                        dense
+                                        round
+                                        color="cyan"
+                                        :icon="chartsIcon"
+                                    />
+                                </div>
+                            </q-item-section>
+                        </q-item>
+
+                        <q-item>
+                            <q-item-section>
+                                <q-item-label>
+                                    The Diet & Weight module tracks key nutritional and body
+                                    composition metrics. These measurements provide a comprehensive
+                                    overview of dietary intake and weight-related health indicators.
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+
+                        <q-card-actions>
+                            <q-btn
+                                :disable="$q.loading.isActive"
+                                color="primary"
+                                label="Access Module"
+                                class="full-width"
+                                :icon="weightModuleIcon"
+                                @click="
+                                    () =>
+                                        $q.dialog({
+                                            component: DialogMeasurementsDietModule,
                                         })
                                 "
                             />

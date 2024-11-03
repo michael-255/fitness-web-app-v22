@@ -2,6 +2,7 @@ import { matStar, matStarBorder } from '@quasar/extras/material-icons'
 import {
     symRoundedAdd,
     symRoundedAddCircle,
+    symRoundedAddNotes,
     symRoundedArrowForward,
     symRoundedAssignment,
     symRoundedBugReport,
@@ -40,6 +41,7 @@ import {
     symRoundedPublish,
     symRoundedRecommend,
     symRoundedRedeem,
+    symRoundedRestaurant,
     symRoundedSave,
     symRoundedSchedule,
     symRoundedSearch,
@@ -73,7 +75,8 @@ export const plansPageIcon = symRoundedTactic
 export const workoutsPageIcon = symRoundedAssignment
 export const exercisesPageIcon = symRoundedFitnessCenter
 export const measurementsPageIcon = symRoundedConditions
-export const dietWeightModuleIcon = symRoundedMonitorWeight
+export const dietModuleIcon = symRoundedRestaurant
+export const weightModuleIcon = symRoundedMonitorWeight
 export const healthModuleIcon = symRoundedHealthMetrics
 export const bodyModuleIcon = symRoundedStraighten
 export const labWorkModuleIcon = symRoundedLabs
@@ -108,6 +111,7 @@ export const checkIcon = symRoundedCheck
 export const lockIcon = symRoundedLock
 export const unlockIcon = symRoundedLockOpenRight
 export const openDialogIcon = symRoundedOpenInNew
+export const addNotesIcon = symRoundedAddNotes
 
 // Design Elements
 export const menuIcon = symRoundedMenu
