@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { MeasurementFieldEnum } from '@/shared/enums'
-import { addNotesIcon, closeIcon, dietModuleIcon, openDialogIcon, saveIcon } from '@/shared/icons'
-import { compactDateFromMs, timeAgo } from '@/shared/utils'
+import { closeIcon, dietModuleIcon } from '@/shared/icons'
 import { useSettingsStore } from '@/stores/settings'
 import { useDialogPluginComponent } from 'quasar'
+import MeasurementPreviousItem from './MeasurementPreviousItem.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
@@ -35,237 +35,37 @@ const settingsStore = useSettingsStore()
                                     <q-item-label class="text-bold">Diet</q-item-label>
 
                                     <q-item-label v-if="!settingsStore.advancedMode">
-                                        Update the three macronutrients below. You should only do
-                                        this once a day.
+                                        Update your calories and the three macronutrients below. You
+                                        should only do this once a day.
                                     </q-item-label>
                                 </q-item-section>
                             </q-item>
 
-                            <q-item>
-                                <q-item-section>
-                                    <q-card flat bordered>
-                                        <q-item class="q-mt-sm">
-                                            <q-item-section top>
-                                                <q-item-label class="text-body1 text-bold">
-                                                    {{ MeasurementFieldEnum.CALORIES }}
-                                                </q-item-label>
+                            <MeasurementPreviousItem
+                                :title="MeasurementFieldEnum.CALORIES"
+                                previous-value="3350"
+                                :previous-created-at="Date.now()"
+                            />
 
-                                                <q-item-label class="text-h6 text-cyan">
-                                                    3500
-                                                </q-item-label>
+                            <MeasurementPreviousItem
+                                :title="MeasurementFieldEnum.CARBS"
+                                previous-value="123"
+                                :previous-created-at="Date.now() - 10000000000"
+                            />
 
-                                                <q-item-label caption>
-                                                    <div class="text-grey-5">
-                                                        <span class="q-mr-xs">
-                                                            {{ compactDateFromMs(Date.now()) }}
-                                                        </span>
-                                                        <q-badge
-                                                            outline
-                                                            :color="timeAgo(Date.now()).color"
-                                                            class="q-mt-xs"
-                                                        >
-                                                            {{ timeAgo(Date.now()).message }}
-                                                        </q-badge>
-                                                    </div>
-                                                </q-item-label>
-                                            </q-item-section>
+                            <MeasurementPreviousItem
+                                :title="MeasurementFieldEnum.FAT"
+                                previous-value="72"
+                                :previous-created-at="Date.now() - 100000000"
+                                value-suffix="grams"
+                            />
 
-                                            <q-item-section top side>
-                                                <q-btn
-                                                    class="btn-translation"
-                                                    flat
-                                                    round
-                                                    color="positive"
-                                                    :icon="saveIcon"
-                                                />
-                                                <q-btn
-                                                    class="btn-translation"
-                                                    flat
-                                                    round
-                                                    color="primary"
-                                                    :icon="addNotesIcon"
-                                                />
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-card>
-                                </q-item-section>
-                            </q-item>
-
-                            <q-item>
-                                <q-item-section>
-                                    <q-card flat bordered>
-                                        <q-item class="q-mt-sm">
-                                            <q-item-section top>
-                                                <q-item-label class="text-h5">
-                                                    {{ MeasurementFieldEnum.CALORIES }}
-                                                </q-item-label>
-
-                                                <q-item-label class="text-h5 text-cyan">
-                                                    3500
-                                                </q-item-label>
-
-                                                <q-item-label caption>
-                                                    <div class="text-grey-5">
-                                                        <span class="q-mr-xs">
-                                                            {{ compactDateFromMs(Date.now()) }}
-                                                        </span>
-                                                        <q-badge
-                                                            outline
-                                                            :color="timeAgo(Date.now()).color"
-                                                            class="q-mt-xs"
-                                                        >
-                                                            {{ timeAgo(Date.now()).message }}
-                                                        </q-badge>
-                                                    </div>
-                                                </q-item-label>
-                                            </q-item-section>
-
-                                            <q-item-section top side>
-                                                <q-btn
-                                                    class="btn-translation"
-                                                    flat
-                                                    dense
-                                                    round
-                                                    color="positive"
-                                                    :icon="openDialogIcon"
-                                                />
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-card>
-                                </q-item-section>
-                            </q-item>
-
-                            <q-item>
-                                <q-item-section>
-                                    <q-card flat bordered>
-                                        <q-item class="q-mt-sm">
-                                            <q-item-section top>
-                                                <q-item-label class="text-h5">
-                                                    {{ MeasurementFieldEnum.CARBS }}
-                                                </q-item-label>
-
-                                                <q-item-label class="text-h5 text-cyan">
-                                                    120
-                                                </q-item-label>
-
-                                                <q-item-label caption>
-                                                    <div class="text-grey-5">
-                                                        <span class="q-mr-xs">
-                                                            {{ compactDateFromMs(Date.now()) }}
-                                                        </span>
-                                                        <q-badge
-                                                            outline
-                                                            :color="timeAgo(Date.now()).color"
-                                                            class="q-mt-xs"
-                                                        >
-                                                            {{ timeAgo(Date.now()).message }}
-                                                        </q-badge>
-                                                    </div>
-                                                </q-item-label>
-                                            </q-item-section>
-
-                                            <q-item-section top side>
-                                                <q-btn
-                                                    class="btn-translation"
-                                                    flat
-                                                    dense
-                                                    round
-                                                    color="positive"
-                                                    :icon="openDialogIcon"
-                                                />
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-card>
-                                </q-item-section>
-                            </q-item>
-
-                            <q-item>
-                                <q-item-section>
-                                    <q-card flat bordered>
-                                        <q-item class="q-mt-sm">
-                                            <q-item-section top>
-                                                <q-item-label class="text-h5">
-                                                    {{ MeasurementFieldEnum.FAT }}
-                                                </q-item-label>
-
-                                                <q-item-label class="text-h5 text-cyan">
-                                                    60
-                                                </q-item-label>
-
-                                                <q-item-label caption>
-                                                    <div class="text-grey-5">
-                                                        <span class="q-mr-xs">
-                                                            {{ compactDateFromMs(Date.now()) }}
-                                                        </span>
-                                                        <q-badge
-                                                            outline
-                                                            :color="timeAgo(Date.now()).color"
-                                                            class="q-mt-xs"
-                                                        >
-                                                            {{ timeAgo(Date.now()).message }}
-                                                        </q-badge>
-                                                    </div>
-                                                </q-item-label>
-                                            </q-item-section>
-
-                                            <q-item-section top side>
-                                                <q-btn
-                                                    class="btn-translation"
-                                                    flat
-                                                    dense
-                                                    round
-                                                    color="positive"
-                                                    :icon="openDialogIcon"
-                                                />
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-card>
-                                </q-item-section>
-                            </q-item>
-
-                            <q-item>
-                                <q-item-section>
-                                    <q-card flat bordered>
-                                        <q-item class="q-mt-sm">
-                                            <q-item-section top>
-                                                <q-item-label class="text-h5">
-                                                    {{ MeasurementFieldEnum.PROTEIN }}
-                                                </q-item-label>
-
-                                                <q-item-label class="text-h5 text-cyan">
-                                                    85
-                                                </q-item-label>
-
-                                                <q-item-label caption>
-                                                    <div class="text-grey-5">
-                                                        <span class="q-mr-xs">
-                                                            {{ compactDateFromMs(Date.now()) }}
-                                                        </span>
-                                                        <q-badge
-                                                            outline
-                                                            :color="timeAgo(Date.now()).color"
-                                                            class="q-mt-xs"
-                                                        >
-                                                            {{ timeAgo(Date.now()).message }}
-                                                        </q-badge>
-                                                    </div>
-                                                </q-item-label>
-                                            </q-item-section>
-
-                                            <q-item-section top side>
-                                                <q-btn
-                                                    class="btn-translation"
-                                                    flat
-                                                    dense
-                                                    round
-                                                    color="positive"
-                                                    :icon="openDialogIcon"
-                                                />
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-card>
-                                </q-item-section>
-                            </q-item>
+                            <MeasurementPreviousItem
+                                :title="MeasurementFieldEnum.PROTEIN"
+                                previous-value="95"
+                                :previous-created-at="Date.now() - 200000000000"
+                                value-suffix="grams"
+                            />
                         </q-list>
 
                         <div class="q-mt-xl" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DashboardCard from '@/components/dashboard/DashboardCard.vue'
+import DashboardActivityItem from '@/components/dashboard/DashboardActivityItem.vue'
 import DashboardEmptyMessage from '@/components/dashboard/DashboardEmptyMessage.vue'
 import PageFabMenu from '@/components/page/PageFabMenu.vue'
 import PageHeading from '@/components/page/PageHeading.vue'
@@ -8,7 +8,7 @@ import useLogger from '@/composables/useLogger'
 import { WorkoutResultServInst } from '@/services/WorkoutResultService'
 import { WorkoutServInst } from '@/services/WorkoutService'
 import { appName } from '@/shared/constants'
-import { RouteNameEnum, StatusEnum, TableEnum } from '@/shared/enums'
+import { RouteNameEnum, TableEnum } from '@/shared/enums'
 import { addIcon, workoutsPageIcon } from '@/shared/icons'
 import type { WorkoutType } from '@/shared/types'
 import { useMeta, useQuasar } from 'quasar'
@@ -88,36 +88,13 @@ onUnmounted(() => {
                 @onEmptyAction="() => $q.dialog(WorkoutServInst.createDialogOptions())"
             />
 
-            <q-item v-for="record in liveRecords" :key="record.id">
-                <q-item-section>
-                    <DashboardCard
-                        :recordName="record?.name"
-                        :recordDesc="record?.desc"
-                        :recordLastChildCreatedAt="record?.lastChild?.createdAt"
-                        :recordLastChildNote="record?.lastChild?.note"
-                        :isLoading="$q.loading.isActive"
-                        :hasLastChild="!!record?.lastChild"
-                        :hasLockedStatus="record.status.includes(StatusEnum.LOCKED)"
-                        :hasFavoriteStatus="record.status.includes(StatusEnum.FAVORITED)"
-                        :supportsCharts="true"
-                        :supportsInspect="true"
-                        :supportsEdit="true"
-                        :supportsDelete="true"
-                        @onCharts="() => $q.dialog(WorkoutServInst.chartsDialogOptions(record.id))"
-                        @onInspect="
-                            () => $q.dialog(WorkoutServInst.inspectDialogOptions(record.id))
-                        "
-                        @onEdit="() => $q.dialog(WorkoutServInst.editDialogOptions(record.id))"
-                        @onDelete="() => $q.dialog(WorkoutServInst.deleteDialogOptions(record.id))"
-                        @onFavorite="
-                            () => $q.dialog(WorkoutServInst.toggleFavoriteDialogOptions(record.id))
-                        "
-                        @onAddEntry="
-                            () => $q.dialog(WorkoutResultServInst.createDialogOptions(record.id))
-                        "
-                    />
-                </q-item-section>
-            </q-item>
+            <DashboardActivityItem
+                v-for="record in liveRecords"
+                :key="record.id"
+                :record="record"
+                :service="WorkoutServInst"
+                :childService="WorkoutResultServInst"
+            />
         </q-list>
     </PageResponsive>
 </template>

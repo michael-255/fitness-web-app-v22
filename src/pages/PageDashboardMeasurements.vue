@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DashboardMeasurementItem from '@/components/dashboard/DashboardMeasurementItem.vue'
 import DialogMeasurementsDietModule from '@/components/dialogs/measurements/DialogMeasurementsDietModule.vue'
 import PageFabMenu from '@/components/page/PageFabMenu.vue'
 import PageHeading from '@/components/page/PageHeading.vue'
@@ -9,7 +10,6 @@ import { RouteNameEnum, TableEnum } from '@/shared/enums'
 import {
     addIcon,
     bodyModuleIcon,
-    chartsIcon,
     dietModuleIcon,
     healthModuleIcon,
     labWorkModuleIcon,
@@ -55,247 +55,50 @@ const router = useRouter()
         />
 
         <q-list padding>
-            <q-item>
-                <q-item-section>
-                    <q-card>
-                        <q-item class="q-mt-sm">
-                            <q-item-section top>
-                                <q-item-label class="text-h5"> Diet </q-item-label>
-                            </q-item-section>
+            <DashboardMeasurementItem
+                title="Diet"
+                description="The Diet module tracks key nutritional information. These measurements can be used to assess nutritional adequacy and monitor dietary patterns."
+                :icon="dietModuleIcon"
+                :hasRecords="false"
+                @onCharts="() => console.log('Diet charts clicked')"
+                @onAccessModule="() => $q.dialog({ component: DialogMeasurementsDietModule })"
+            />
 
-                            <q-item-section top side>
-                                <div class="row">
-                                    <q-btn
-                                        :disable="$q.loading.isActive"
-                                        class="btn-translation"
-                                        flat
-                                        dense
-                                        round
-                                        color="cyan"
-                                        :icon="chartsIcon"
-                                    />
-                                </div>
-                            </q-item-section>
-                        </q-item>
+            <DashboardMeasurementItem
+                title="Weight"
+                description="The Weight module tracks body composition metrics. These measurements provide insight into weight-related health indicators."
+                :icon="weightModuleIcon"
+                :hasRecords="false"
+                @onCharts="() => console.log('Weight charts clicked')"
+                @onAccessModule="() => console.log('Weight module clicked')"
+            />
 
-                        <q-item>
-                            <q-item-section>
-                                <q-item-label>
-                                    The Diet & Weight module tracks key nutritional and body
-                                    composition metrics. These measurements provide a comprehensive
-                                    overview of dietary intake and weight-related health indicators.
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
+            <DashboardMeasurementItem
+                title="Health"
+                description="The Health module tracks vital health indicators providing essential data for monitoring overall health."
+                :icon="healthModuleIcon"
+                :hasRecords="false"
+                @onCharts="() => console.log('Health charts clicked')"
+                @onAccessModule="() => console.log('Health module clicked')"
+            />
 
-                        <q-card-actions>
-                            <q-btn
-                                :disable="$q.loading.isActive"
-                                color="primary"
-                                label="Access Module"
-                                class="full-width"
-                                :icon="dietModuleIcon"
-                                @click="
-                                    () =>
-                                        $q.dialog({
-                                            component: DialogMeasurementsDietModule,
-                                        })
-                                "
-                            />
-                        </q-card-actions>
-                    </q-card>
-                </q-item-section>
-            </q-item>
+            <DashboardMeasurementItem
+                title="Body"
+                description="The Body module tracks various physical dimension measurements which provide a detailed overview of an individual's body composition and physical attributes."
+                :icon="bodyModuleIcon"
+                :hasRecords="false"
+                @onCharts="() => console.log('Body charts clicked')"
+                @onAccessModule="() => console.log('Body module clicked')"
+            />
 
-            <q-item>
-                <q-item-section>
-                    <q-card>
-                        <q-item class="q-mt-sm">
-                            <q-item-section top>
-                                <q-item-label class="text-h5"> Weight </q-item-label>
-                            </q-item-section>
-
-                            <q-item-section top side>
-                                <div class="row">
-                                    <q-btn
-                                        :disable="$q.loading.isActive"
-                                        class="btn-translation"
-                                        flat
-                                        dense
-                                        round
-                                        color="cyan"
-                                        :icon="chartsIcon"
-                                    />
-                                </div>
-                            </q-item-section>
-                        </q-item>
-
-                        <q-item>
-                            <q-item-section>
-                                <q-item-label>
-                                    The Diet & Weight module tracks key nutritional and body
-                                    composition metrics. These measurements provide a comprehensive
-                                    overview of dietary intake and weight-related health indicators.
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
-
-                        <q-card-actions>
-                            <q-btn
-                                :disable="$q.loading.isActive"
-                                color="primary"
-                                label="Access Module"
-                                class="full-width"
-                                :icon="weightModuleIcon"
-                                @click="
-                                    () =>
-                                        $q.dialog({
-                                            component: DialogMeasurementsDietModule,
-                                        })
-                                "
-                            />
-                        </q-card-actions>
-                    </q-card>
-                </q-item-section>
-            </q-item>
-
-            <q-item>
-                <q-item-section>
-                    <q-card>
-                        <q-item class="q-mt-sm">
-                            <q-item-section top>
-                                <q-item-label class="text-h5">Health</q-item-label>
-                            </q-item-section>
-
-                            <q-item-section top side>
-                                <div class="row">
-                                    <q-btn
-                                        :disable="$q.loading.isActive"
-                                        class="btn-translation"
-                                        flat
-                                        dense
-                                        round
-                                        color="cyan"
-                                        :icon="chartsIcon"
-                                    />
-                                </div>
-                            </q-item-section>
-                        </q-item>
-
-                        <q-item>
-                            <q-item-section>
-                                <q-item-label>
-                                    The Health module tracks vital health indicators providing
-                                    essential data for monitoring overall health.
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
-
-                        <q-card-actions>
-                            <q-btn
-                                :disable="$q.loading.isActive"
-                                color="primary"
-                                label="Access Module"
-                                class="full-width"
-                                :icon="healthModuleIcon"
-                            />
-                        </q-card-actions>
-                    </q-card>
-                </q-item-section>
-            </q-item>
-
-            <q-item>
-                <q-item-section>
-                    <q-card>
-                        <q-item class="q-mt-sm">
-                            <q-item-section top>
-                                <q-item-label class="text-h5">Body</q-item-label>
-                            </q-item-section>
-
-                            <q-item-section top side>
-                                <div class="row">
-                                    <q-btn
-                                        :disable="$q.loading.isActive"
-                                        class="btn-translation"
-                                        flat
-                                        dense
-                                        round
-                                        color="cyan"
-                                        :icon="chartsIcon"
-                                    />
-                                </div>
-                            </q-item-section>
-                        </q-item>
-
-                        <q-item>
-                            <q-item-section>
-                                <q-item-label>
-                                    The Body module tracks various physical dimension measurements
-                                    which provide a detailed overview of an individual's body
-                                    composition and physical attributes.
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
-
-                        <q-card-actions>
-                            <q-btn
-                                :disable="$q.loading.isActive"
-                                color="primary"
-                                label="Access Module"
-                                class="full-width"
-                                :icon="bodyModuleIcon"
-                            />
-                        </q-card-actions>
-                    </q-card>
-                </q-item-section>
-            </q-item>
-
-            <q-item>
-                <q-item-section>
-                    <q-card>
-                        <q-item class="q-mt-sm">
-                            <q-item-section top>
-                                <q-item-label class="text-h5">Lab Work</q-item-label>
-                            </q-item-section>
-
-                            <q-item-section top side>
-                                <div class="row">
-                                    <q-btn
-                                        :disable="$q.loading.isActive"
-                                        class="btn-translation"
-                                        flat
-                                        dense
-                                        round
-                                        color="cyan"
-                                        :icon="chartsIcon"
-                                    />
-                                </div>
-                            </q-item-section>
-                        </q-item>
-
-                        <q-item>
-                            <q-item-section>
-                                <q-item-label>
-                                    The Lab Work module tracks various blood measurements. These
-                                    measurements provide a detailed overview of an individual's
-                                    blood health and can be used to assess cardiovascular risk and
-                                    monitor conditions such as diabetes.
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
-
-                        <q-card-actions>
-                            <q-btn
-                                :disable="$q.loading.isActive"
-                                color="primary"
-                                label="Access Module"
-                                class="full-width"
-                                :icon="labWorkModuleIcon"
-                            />
-                        </q-card-actions>
-                    </q-card>
-                </q-item-section>
-            </q-item>
+            <DashboardMeasurementItem
+                title="Lab Work"
+                description="The Lab Work module tracks various blood measurements. These measurements provide a detailed overview of an individual's blood health and can be used to assess cardiovascular risk and monitor conditions such as diabetes."
+                :icon="labWorkModuleIcon"
+                :hasRecords="false"
+                @onCharts="() => console.log('Lab Work charts clicked')"
+                @onAccessModule="() => console.log('Lab Work module clicked')"
+            />
         </q-list>
     </PageResponsive>
 </template>
