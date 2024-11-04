@@ -36,17 +36,15 @@ const $q = useQuasar()
                                 :disable="!previousValue || $q.loading.isActive"
                                 :icon="editIcon"
                                 color="amber"
-                                flat
                                 round
-                                dense
+                                flat
                             />
                             <q-btn
                                 :disable="$q.loading.isActive"
                                 :icon="openDialogIcon"
                                 color="positive"
-                                flat
                                 round
-                                dense
+                                flat
                             />
                         </div>
                     </q-item-section>
@@ -57,9 +55,9 @@ const $q = useQuasar()
                         <q-item-label v-if="previousCreatedAt" caption>
                             <div class="text-grey-5 row">
                                 <q-badge
-                                    outline
                                     :color="timeAgo(previousCreatedAt).color"
                                     class="q-mr-xs"
+                                    outline
                                 >
                                     {{ timeAgo(previousCreatedAt).message }}
                                 </q-badge>
@@ -76,3 +74,9 @@ const $q = useQuasar()
         </q-item-section>
     </q-item>
 </template>
+
+<style scoped>
+.btn-translation {
+    transform: translateY(-12px) translateX(12px);
+}
+</style>

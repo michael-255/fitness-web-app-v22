@@ -66,6 +66,14 @@ const settingsStore = useSettingsStore()
                                 :previous-created-at="Date.now() - 200000000000"
                                 value-suffix="grams"
                             />
+
+                            <!-- TODO: Testing larger text (remove later) -->
+                            <MeasurementPreviousItem
+                                title="Cholesterol HDL"
+                                previous-value="52"
+                                :previous-created-at="Date.now() - 20000000000"
+                                value-suffix="mg/dL"
+                            />
                         </q-list>
 
                         <div class="q-mt-xl" />
