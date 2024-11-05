@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import DashboardMeasurementItem from '@/components/dashboard/DashboardMeasurementItem.vue'
-import DialogMeasurementsDietModule from '@/components/dialogs/measurements/DialogMeasurementsDietModule.vue'
+import DialogBodyModule from '@/components/dialogs/measurements/DialogBodyModule.vue'
+import DialogDietModule from '@/components/dialogs/measurements/DialogDietModule.vue'
+import DialogHealthModule from '@/components/dialogs/measurements/DialogHealthModule.vue'
+import DialogLabWorkModule from '@/components/dialogs/measurements/DialogLabWorkModule.vue'
+import DialogWeightModule from '@/components/dialogs/measurements/DialogWeightModule.vue'
 import PageFabMenu from '@/components/page/PageFabMenu.vue'
 import PageHeading from '@/components/page/PageHeading.vue'
 import PageResponsive from '@/components/page/PageResponsive.vue'
@@ -61,7 +65,7 @@ const router = useRouter()
                 :icon="dietModuleIcon"
                 :hasRecords="false"
                 @onCharts="() => console.log('Diet charts clicked')"
-                @onAccessModule="() => $q.dialog({ component: DialogMeasurementsDietModule })"
+                @onAccessModule="() => $q.dialog({ component: DialogDietModule })"
             />
 
             <DashboardMeasurementItem
@@ -70,7 +74,7 @@ const router = useRouter()
                 :icon="weightModuleIcon"
                 :hasRecords="false"
                 @onCharts="() => console.log('Weight charts clicked')"
-                @onAccessModule="() => console.log('Weight module clicked')"
+                @onAccessModule="() => $q.dialog({ component: DialogWeightModule })"
             />
 
             <DashboardMeasurementItem
@@ -79,7 +83,7 @@ const router = useRouter()
                 :icon="healthModuleIcon"
                 :hasRecords="false"
                 @onCharts="() => console.log('Health charts clicked')"
-                @onAccessModule="() => console.log('Health module clicked')"
+                @onAccessModule="() => $q.dialog({ component: DialogHealthModule })"
             />
 
             <DashboardMeasurementItem
@@ -88,7 +92,7 @@ const router = useRouter()
                 :icon="bodyModuleIcon"
                 :hasRecords="false"
                 @onCharts="() => console.log('Body charts clicked')"
-                @onAccessModule="() => console.log('Body module clicked')"
+                @onAccessModule="() => $q.dialog({ component: DialogBodyModule })"
             />
 
             <DashboardMeasurementItem
@@ -97,7 +101,7 @@ const router = useRouter()
                 :icon="labWorkModuleIcon"
                 :hasRecords="false"
                 @onCharts="() => console.log('Lab Work charts clicked')"
-                @onAccessModule="() => console.log('Lab Work module clicked')"
+                @onAccessModule="() => $q.dialog({ component: DialogLabWorkModule })"
             />
         </q-list>
     </PageResponsive>

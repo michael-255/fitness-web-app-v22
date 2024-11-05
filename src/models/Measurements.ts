@@ -9,7 +9,6 @@ import type {
     MeasurementFieldType,
     NutritionType,
     PercentType,
-    SidedBodyMeasurementType,
     TemperatureType,
     TextAreaType,
     TimestampType,
@@ -33,16 +32,18 @@ interface MeasurementParams {
     bloodPressure?: BloodPressureType
     bloodOxygen?: PercentType
     // Body
-    height?: BodyMeasurementType
     neck?: BodyMeasurementType
     shoulders?: BodyMeasurementType
     chest?: BodyMeasurementType
     waist?: BodyMeasurementType
-    hips?: BodyMeasurementType
-    biceps?: SidedBodyMeasurementType
-    forearms?: SidedBodyMeasurementType
-    thighs?: SidedBodyMeasurementType
-    calfs?: SidedBodyMeasurementType
+    leftBicep?: BodyMeasurementType
+    rightBicep?: BodyMeasurementType
+    leftForearm?: BodyMeasurementType
+    rightForearm?: BodyMeasurementType
+    leftThigh?: BodyMeasurementType
+    rightThigh?: BodyMeasurementType
+    leftCalf?: BodyMeasurementType
+    rightCalf?: BodyMeasurementType
     // Lab Work
     cholesterol?: CholesterolType
     cholesterolHDL?: CholesterolType
@@ -73,16 +74,18 @@ export class Measurement {
     bloodPressure?: BloodPressureType
     bloodOxygen?: PercentType
     // Body
-    height?: BodyMeasurementType
     neck?: BodyMeasurementType
     shoulders?: BodyMeasurementType
     chest?: BodyMeasurementType
     waist?: BodyMeasurementType
-    hips?: BodyMeasurementType
-    biceps?: SidedBodyMeasurementType
-    forearms?: SidedBodyMeasurementType
-    thighs?: SidedBodyMeasurementType
-    calfs?: SidedBodyMeasurementType
+    leftBicep?: BodyMeasurementType
+    rightBicep?: BodyMeasurementType
+    leftForearm?: BodyMeasurementType
+    rightForearm?: BodyMeasurementType
+    leftThigh?: BodyMeasurementType
+    rightThigh?: BodyMeasurementType
+    leftCalf?: BodyMeasurementType
+    rightCalf?: BodyMeasurementType
     // Lab Work
     cholesterol?: CholesterolType
     cholesterolHDL?: CholesterolType
@@ -106,16 +109,18 @@ export class Measurement {
         this.bloodPressure = params.bloodPressure ?? undefined
         this.bloodOxygen = params.bloodOxygen ?? undefined
         // Body
-        this.height = params.height ?? undefined
         this.neck = params.neck ?? undefined
         this.shoulders = params.shoulders ?? undefined
         this.chest = params.chest ?? undefined
         this.waist = params.waist ?? undefined
-        this.hips = params.hips ?? undefined
-        this.biceps = params.biceps ?? undefined
-        this.forearms = params.forearms ?? undefined
-        this.thighs = params.thighs ?? undefined
-        this.calfs = params.calfs ?? undefined
+        this.leftBicep = params.leftBicep ?? undefined
+        this.rightBicep = params.rightBicep ?? undefined
+        this.leftForearm = params.leftForearm ?? undefined
+        this.rightForearm = params.rightForearm ?? undefined
+        this.leftThigh = params.leftThigh ?? undefined
+        this.rightThigh = params.rightThigh ?? undefined
+        this.leftCalf = params.leftCalf ?? undefined
+        this.rightCalf = params.rightCalf ?? undefined
         // Lab Work
         this.cholesterol = params.cholesterol ?? undefined
         this.cholesterolHDL = params.cholesterolHDL ?? undefined

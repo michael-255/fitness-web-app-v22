@@ -296,3 +296,24 @@ export function timeAgo(milliseconds: number): { message: string; color: string 
     // This line should never be reached due to the defined units
     throw new Error('Unable to calculate time difference')
 }
+
+/**
+ * Returns a formatted number with commas and options for decimal places, prefix, and suffix.
+ * @param value The number to format
+ * @param decimals Decimals to show
+ * @param prefix Optional prefix to add to the number
+ * @param suffix Optional suffix to add to the number
+ * @returns `$1,000.00`
+ */
+export function formatNumber(
+    value: number,
+    decimals: number = 0,
+    prefix: string = '',
+    suffix: string = '',
+) {
+    const cleanDecimals = Math.abs(Math.floor(decimals))
+    return `${prefix}${value.toLocaleString('en-US', {
+        minimumFractionDigits: cleanDecimals,
+        maximumFractionDigits: cleanDecimals,
+    })}${suffix}`
+}

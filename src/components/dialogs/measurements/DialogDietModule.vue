@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { MeasurementFieldEnum } from '@/shared/enums'
 import { closeIcon, dietModuleIcon } from '@/shared/icons'
+import { formatNumber } from '@/shared/utils'
 import { useSettingsStore } from '@/stores/settings'
 import { useDialogPluginComponent } from 'quasar'
 import MeasurementPreviousItem from './MeasurementPreviousItem.vue'
@@ -30,49 +31,31 @@ const settingsStore = useSettingsStore()
                 <div class="row justify-center">
                     <div class="responsive-container">
                         <q-list padding>
-                            <q-item>
-                                <q-item-section>
-                                    <q-item-label class="text-bold">Diet</q-item-label>
-
-                                    <q-item-label v-if="!settingsStore.advancedMode">
-                                        Update your calories and the three macronutrients below. You
-                                        should only do this once a day.
-                                    </q-item-label>
-                                </q-item-section>
-                            </q-item>
-
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.CALORIES"
-                                previous-value="3350"
+                                :previous-value="formatNumber(3350)"
                                 :previous-created-at="Date.now()"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.CARBS"
-                                previous-value="123"
+                                :previous-value="formatNumber(123)"
                                 :previous-created-at="Date.now() - 10000000000"
+                                value-suffix="grams"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.FAT"
-                                previous-value="72"
+                                :previous-value="formatNumber(72)"
                                 :previous-created-at="Date.now() - 100000000"
                                 value-suffix="grams"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.PROTEIN"
-                                previous-value="95"
+                                :previous-value="formatNumber(95)"
                                 :previous-created-at="Date.now() - 200000000000"
                                 value-suffix="grams"
-                            />
-
-                            <!-- TODO: Testing larger text (remove later) -->
-                            <MeasurementPreviousItem
-                                title="Cholesterol HDL"
-                                previous-value="52"
-                                :previous-created-at="Date.now() - 20000000000"
-                                value-suffix="mg/dL"
                             />
                         </q-list>
 

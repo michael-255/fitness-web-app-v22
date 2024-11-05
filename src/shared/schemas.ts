@@ -108,10 +108,6 @@ export const bloodPressureSchema = z.object({
     diastolic: bloodPressureReadingSchema,
 })
 export const bodyMeasurementSchema = z.number().min(0).max(LimitEnum.MAX_BODY_MEASUREMENT)
-export const sidedBodyMeasurementSchema = z.object({
-    left: bodyMeasurementSchema,
-    right: bodyMeasurementSchema,
-})
 export const measurementSchema = z.object({
     id: idSchema,
     createdAt: timestampSchema,
@@ -130,16 +126,18 @@ export const measurementSchema = z.object({
     bloodPressure: bloodPressureSchema.optional(),
     bloodOxygen: percentSchema.optional(),
     // Body
-    height: bodyMeasurementSchema.optional(),
     neck: bodyMeasurementSchema.optional(),
     shoulders: bodyMeasurementSchema.optional(),
     chest: bodyMeasurementSchema.optional(),
     waist: bodyMeasurementSchema.optional(),
-    hips: bodyMeasurementSchema.optional(),
-    biceps: sidedBodyMeasurementSchema.optional(),
-    forearms: sidedBodyMeasurementSchema.optional(),
-    thighs: sidedBodyMeasurementSchema.optional(),
-    calfs: sidedBodyMeasurementSchema.optional(),
+    leftBiceps: bodyMeasurementSchema.optional(),
+    rightBiceps: bodyMeasurementSchema.optional(),
+    leftForearm: bodyMeasurementSchema.optional(),
+    rightForearm: bodyMeasurementSchema.optional(),
+    leftThigh: bodyMeasurementSchema.optional(),
+    rightThigh: bodyMeasurementSchema.optional(),
+    leftCalf: bodyMeasurementSchema.optional(),
+    rightCalf: bodyMeasurementSchema.optional(),
     // Lab Work
     cholesterol: cholesterolSchema.optional(),
     cholesterolHDL: cholesterolSchema.optional(),

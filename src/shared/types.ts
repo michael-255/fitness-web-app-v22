@@ -34,7 +34,6 @@ import type {
     settingIdSchema,
     settingSchema,
     settingValueSchema,
-    sidedBodyMeasurementSchema,
     sidedWeightSetSchema,
     statusSchema,
     tabataTimerSchema,
@@ -125,7 +124,6 @@ export type TemperatureType = z.infer<typeof temperatureSchema>
 export type BloodPressureReadingType = z.infer<typeof bloodPressureReadingSchema>
 export type BloodPressureType = z.infer<typeof bloodPressureSchema>
 export type BodyMeasurementType = z.infer<typeof bodyMeasurementSchema>
-export type SidedBodyMeasurementType = z.infer<typeof sidedBodyMeasurementSchema>
 export type MeasurementType = z.infer<typeof measurementSchema>
 
 //

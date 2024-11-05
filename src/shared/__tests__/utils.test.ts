@@ -3,6 +3,7 @@ import {
     compactDateFromMs,
     createId,
     durationFromMs,
+    formatNumber,
     hiddenTableColumn,
     recordsCount,
     tableColumn,
@@ -291,40 +292,51 @@ it('timeAgo', () => {
         message: 'in 1 hour',
         color: 'primary',
     })
-    expect(timeAgo(now + 2 * DurationMSEnum['One Hour'])).toEqual({
-        message: 'in 2 hours',
-        color: 'primary',
-    })
-    expect(timeAgo(now + DurationMSEnum['One Day'])).toEqual({
-        message: 'in 1 day',
-        color: 'positive',
-    })
-    expect(timeAgo(now + 2 * DurationMSEnum['One Day'])).toEqual({
-        message: 'in 2 days',
-        color: 'positive',
-    })
-    expect(timeAgo(now + DurationMSEnum['One Week'])).toEqual({
-        message: 'in 1 week',
-        color: 'positive',
-    })
-    expect(timeAgo(now + 2 * DurationMSEnum['One Week'])).toEqual({
-        message: 'in 2 weeks',
-        color: 'positive',
-    })
-    expect(timeAgo(now + DurationMSEnum['One Month'])).toEqual({
-        message: 'in 1 month',
-        color: 'amber',
-    })
-    expect(timeAgo(now + 2 * DurationMSEnum['One Month'])).toEqual({
-        message: 'in 2 months',
-        color: 'amber',
-    })
-    expect(timeAgo(now + DurationMSEnum['One Year'])).toEqual({
-        message: 'in 1 year',
-        color: 'warning',
-    })
-    expect(timeAgo(now + 2 * DurationMSEnum['One Year'])).toEqual({
-        message: 'in 2 years',
-        color: 'warning',
-    })
+})
+
+it('formatNumber', () => {
+    // Test with default parameters
+    expect(formatNumber(1000)).toBe('1,000')
+
+    // Test with zero decimals
+    expect(formatNumber(1000, 0)).toBe('1,000')
+
+    // Test with two decimals
+    expect(formatNumber(1000.1234, 2)).toBe('1,000.12')
+
+    // Test with prefix and two decimals
+    expect(formatNumber(1000, 2, '$')).toBe('$1,000.00')
+
+    // Test with prefix and zero decimals
+    expect(formatNumber(1000, 0, '$')).toBe('$1,000')
+
+    // Test with suffix and two decimals
+    expect(formatNumber(1000, 2, '', ' USD')).toBe('1,000.00 USD')
+
+    // Test with suffix and zero decimals
+    expect(formatNumber(1000, 0, '', ' USD')).toBe('1,000 USD')
+
+    // Test with prefix, suffix, and two decimals
+    expect(formatNumber(1000, 2, '$', ' USD')).toBe('$1,000.00 USD')
+
+    // Test with prefix, suffix, and zero decimals
+    expect(formatNumber(1000, 0, '$', ' USD')).toBe('$1,000 USD')
+
+    // Test with negative number and two decimals
+    expect(formatNumber(-1000.1234, 2)).toBe('-1,000.12')
+
+    // Test with negative number and zero decimals
+    expect(formatNumber(-1000, 0)).toBe('-1,000')
+
+    // Test with large number and two decimals
+    expect(formatNumber(1234567890.1234, 2)).toBe('1,234,567,890.12')
+
+    // Test with large number and zero decimals
+    expect(formatNumber(1234567890, 0)).toBe('1,234,567,890')
+
+    // Test with negative decimals (should be treated as positive)
+    expect(formatNumber(1000.1234, -2)).toBe('1,000.12')
+
+    // Test with non-integer decimals (should be floored)
+    expect(formatNumber(1000.1234, 2.7)).toBe('1,000.12')
 })

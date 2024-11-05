@@ -138,19 +138,17 @@ export enum MeasurementFieldEnum {
     FAT = 'Fat',
     PROTEIN = 'Protein',
     // Weight
-    BODY_WEIGHT = 'Weight',
+    BODY_WEIGHT = 'Body Weight',
     BODY_FAT = 'Body Fat',
     // Health
     TEMPERATURE = 'Temperature',
     BLOOD_PRESSURE = 'Blood Pressure', // Systolic/Diastolic
     BLOOD_OXYGEN = 'Blood Oxygen',
     // Body
-    HEIGHT = 'Height', // Needed for BMI
     NECK = 'Neck',
     SHOULDERS = 'Shoulders',
     CHEST = 'Chest',
     WAIST = 'Waist',
-    HIPS = 'Hips',
     LEFT_BICEP = 'Left Bicep',
     RIGHT_BICEP = 'Right Bicep',
     LEFT_FOREARM = 'Left Forearm',
