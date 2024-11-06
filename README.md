@@ -8,6 +8,8 @@ features to track and enhance your workouts, exercises, and overall fitness jour
 -   Implement the `Measurements` modules first since measurement data is standalone
 -   Group together record types based on the module
 -   Dialog and Chart creation will be needed for this
+-   Module item `Open Dialog`
+-   Module item `Edit Previous`
 
 ## TODO `Plans`
 

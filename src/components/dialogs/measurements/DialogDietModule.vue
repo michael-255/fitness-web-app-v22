@@ -2,14 +2,11 @@
 import { MeasurementFieldEnum } from '@/shared/enums'
 import { closeIcon, dietModuleIcon } from '@/shared/icons'
 import { formatNumber } from '@/shared/utils'
-import { useSettingsStore } from '@/stores/settings'
 import { useDialogPluginComponent } from 'quasar'
 import MeasurementPreviousItem from './MeasurementPreviousItem.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
-
-const settingsStore = useSettingsStore()
 </script>
 
 <template>
