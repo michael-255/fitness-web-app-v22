@@ -31,7 +31,7 @@ const $q = useQuasar()
                             :disable="!hasRecords || $q.loading.isActive"
                             :icon="chartsIcon"
                             class="btn-translation"
-                            color="cyan"
+                            :color="!hasRecords || $q.loading.isActive ? 'grey' : 'cyan'"
                             flat
                             dense
                             round

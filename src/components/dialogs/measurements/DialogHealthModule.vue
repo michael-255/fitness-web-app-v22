@@ -1,12 +1,65 @@
 <script setup lang="ts">
+import useLogger from '@/composables/useLogger'
+import { MeasurementServInst } from '@/services/MeasurementService'
 import { MeasurementFieldEnum } from '@/shared/enums'
 import { closeIcon, healthModuleIcon } from '@/shared/icons'
+import type { MeasurementType } from '@/shared/types'
 import { formatNumber } from '@/shared/utils'
 import { useDialogPluginComponent } from 'quasar'
+import { onUnmounted, ref, type Ref } from 'vue'
 import MeasurementPreviousItem from './MeasurementPreviousItem.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
+
+const { log } = useLogger()
+
+const createSubscription = (
+    field: MeasurementFieldEnum,
+    liveRef: Ref<MeasurementType | undefined>,
+    finishedRef: Ref<boolean>,
+) => {
+    return MeasurementServInst.liveMeasurement(field).subscribe({
+        next: (record) => {
+            liveRef.value = record
+            finishedRef.value = true
+        },
+        error: (error) => {
+            log.error(`Error loading live ${MeasurementServInst.labelPlural} data`, error as Error)
+            finishedRef.value = true
+        },
+    })
+}
+
+const tempSubscriptionFinished = ref(false)
+const bloodPressureSubscriptionFinished = ref(false)
+const bloodOxygenSubscriptionFinished = ref(false)
+
+const liveTemperature: Ref<MeasurementType | undefined> = ref(undefined)
+const liveBloodPressure: Ref<MeasurementType | undefined> = ref(undefined)
+const liveBloodOxygen: Ref<MeasurementType | undefined> = ref(undefined)
+
+const tempSubscription = createSubscription(
+    MeasurementFieldEnum.TEMPERATURE,
+    liveTemperature,
+    tempSubscriptionFinished,
+)
+const bloodPressureSubscription = createSubscription(
+    MeasurementFieldEnum.BLOOD_PRESSURE,
+    liveBloodPressure,
+    bloodPressureSubscriptionFinished,
+)
+const bloodOxygenSubscription = createSubscription(
+    MeasurementFieldEnum.BLOOD_OXYGEN,
+    liveBloodOxygen,
+    bloodOxygenSubscriptionFinished,
+)
+
+onUnmounted(() => {
+    tempSubscription.unsubscribe()
+    bloodPressureSubscription.unsubscribe()
+    bloodOxygenSubscription.unsubscribe()
+})
 </script>
 
 <template>
@@ -30,22 +83,28 @@ const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
                         <q-list padding>
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.TEMPERATURE"
-                                :previous-value="formatNumber(98.6, 1)"
-                                :previous-created-at="Date.now()"
+                                :measurement-field="MeasurementFieldEnum.TEMPERATURE"
+                                :previous-id="liveTemperature?.id"
+                                :previous-value="formatNumber(liveTemperature?.temperature, 1)"
+                                :previous-created-at="liveTemperature?.createdAt"
                                 value-suffix="°F"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.BLOOD_PRESSURE"
-                                :previous-value="`${formatNumber(120)}/${formatNumber(70)}`"
-                                :previous-created-at="Date.now() - 10000000000"
+                                :measurement-field="MeasurementFieldEnum.BLOOD_PRESSURE"
+                                :previous-id="liveBloodPressure?.id"
+                                :previous-value="`${formatNumber(liveBloodPressure?.bloodPressureSystolic)}/${formatNumber(liveBloodPressure?.bloodPressureDiastolic)}`"
+                                :previous-created-at="liveBloodPressure?.createdAt"
                                 value-suffix="mm Hg"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.BLOOD_OXYGEN"
-                                :previous-value="formatNumber(96)"
-                                :previous-created-at="Date.now() - 10000000000"
+                                :measurement-field="MeasurementFieldEnum.BLOOD_OXYGEN"
+                                :previous-id="liveBloodOxygen?.id"
+                                :previous-value="formatNumber(liveBloodOxygen?.bloodOxygen, 1)"
+                                :previous-created-at="liveBloodOxygen?.createdAt"
                                 value-suffix="%"
                             />
                         </q-list>

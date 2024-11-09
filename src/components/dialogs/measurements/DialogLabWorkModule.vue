@@ -1,12 +1,73 @@
 <script setup lang="ts">
+import useLogger from '@/composables/useLogger'
+import { MeasurementServInst } from '@/services/MeasurementService'
 import { MeasurementFieldEnum } from '@/shared/enums'
 import { closeIcon, labWorkModuleIcon } from '@/shared/icons'
+import type { MeasurementType } from '@/shared/types'
 import { formatNumber } from '@/shared/utils'
 import { useDialogPluginComponent } from 'quasar'
+import { onUnmounted, ref, type Ref } from 'vue'
 import MeasurementPreviousItem from './MeasurementPreviousItem.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
+
+const { log } = useLogger()
+
+const createSubscription = (
+    field: MeasurementFieldEnum,
+    liveRef: Ref<MeasurementType | undefined>,
+    finishedRef: Ref<boolean>,
+) => {
+    return MeasurementServInst.liveMeasurement(field).subscribe({
+        next: (record) => {
+            liveRef.value = record
+            finishedRef.value = true
+        },
+        error: (error) => {
+            log.error(`Error loading live ${MeasurementServInst.labelPlural} data`, error as Error)
+            finishedRef.value = true
+        },
+    })
+}
+
+const finishedCholesterol = ref(false)
+const finishedCholesterolHDL = ref(false)
+const finishedCholesterolLDL = ref(false)
+const finishedHemoglobinA1C = ref(false)
+
+const liveCholesterol = ref<MeasurementType | undefined>(undefined)
+const liveCholesterolHDL = ref<MeasurementType | undefined>(undefined)
+const liveCholesterolLDL = ref<MeasurementType | undefined>(undefined)
+const liveHemoglobinA1C = ref<MeasurementType | undefined>(undefined)
+
+const cholesterolSubscription = createSubscription(
+    MeasurementFieldEnum.CHOLESTEROL,
+    liveCholesterol,
+    finishedCholesterol,
+)
+const cholesterolHDLSubscription = createSubscription(
+    MeasurementFieldEnum.CHOLESTEROL_HDL,
+    liveCholesterolHDL,
+    finishedCholesterolHDL,
+)
+const cholesterolLDLSubscription = createSubscription(
+    MeasurementFieldEnum.CHOLESTEROL_LDL,
+    liveCholesterolLDL,
+    finishedCholesterolLDL,
+)
+const hemoglobinA1CSubscription = createSubscription(
+    MeasurementFieldEnum.HEMOGLOBIN_A1C,
+    liveHemoglobinA1C,
+    finishedHemoglobinA1C,
+)
+
+onUnmounted(() => {
+    cholesterolSubscription.unsubscribe()
+    cholesterolHDLSubscription.unsubscribe()
+    cholesterolLDLSubscription.unsubscribe()
+    hemoglobinA1CSubscription.unsubscribe()
+})
 </script>
 
 <template>
@@ -30,30 +91,38 @@ const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
                         <q-list padding>
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.CHOLESTEROL"
-                                :previous-value="formatNumber(100)"
-                                :previous-created-at="Date.now()"
+                                :measurement-field="MeasurementFieldEnum.CHOLESTEROL"
+                                :previous-id="liveCholesterol?.id"
+                                :previous-value="formatNumber(liveCholesterol?.cholesterol)"
+                                :previous-created-at="liveCholesterol?.createdAt"
                                 value-suffix="mg/dL"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.CHOLESTEROL_HDL"
-                                :previous-value="formatNumber(50)"
-                                :previous-created-at="Date.now() - 10000000000"
+                                :measurement-field="MeasurementFieldEnum.CHOLESTEROL_HDL"
+                                :previous-id="liveCholesterolHDL?.id"
+                                :previous-value="formatNumber(liveCholesterolHDL?.cholesterolHDL)"
+                                :previous-created-at="liveCholesterolHDL?.createdAt"
                                 value-suffix="mg/dL"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.CHOLESTEROL_LDL"
-                                :previous-value="formatNumber(50)"
-                                :previous-created-at="Date.now() - 20000000000"
+                                :measurement-field="MeasurementFieldEnum.CHOLESTEROL_LDL"
+                                :previous-id="liveCholesterolLDL?.id"
+                                :previous-value="formatNumber(liveCholesterolLDL?.cholesterolLDL)"
+                                :previous-created-at="liveCholesterolLDL?.createdAt"
                                 value-suffix="mg/dL"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.HEMOGLOBIN_A1C"
-                                :previous-value="formatNumber(5.7, 1)"
-                                :previous-created-at="Date.now() - 30000000000"
-                                value-suffix="Percent"
+                                :measurement-field="MeasurementFieldEnum.HEMOGLOBIN_A1C"
+                                :previous-id="liveHemoglobinA1C?.id"
+                                :previous-value="formatNumber(liveHemoglobinA1C?.hemoglobinA1C, 1)"
+                                :previous-created-at="liveHemoglobinA1C?.createdAt"
+                                value-suffix="%"
                             />
                         </q-list>
 

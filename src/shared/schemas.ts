@@ -103,10 +103,6 @@ export const bloodPressureReadingSchema = z
     .int()
     .min(LimitEnum.MIN_BLOOD_PRESSURE)
     .max(LimitEnum.MAX_BLOOD_PRESSURE)
-export const bloodPressureSchema = z.object({
-    systolic: bloodPressureReadingSchema,
-    diastolic: bloodPressureReadingSchema,
-})
 export const bodyMeasurementSchema = z.number().min(0).max(LimitEnum.MAX_BODY_MEASUREMENT)
 export const measurementSchema = z.object({
     id: idSchema,
@@ -123,15 +119,16 @@ export const measurementSchema = z.object({
     bodyFat: percentSchema.optional(),
     // Health
     temperature: temperatureSchema.optional(),
-    bloodPressure: bloodPressureSchema.optional(),
+    bloodPressureSystolic: bloodPressureReadingSchema.optional(),
+    bloodPressureDiastolic: bloodPressureReadingSchema.optional(),
     bloodOxygen: percentSchema.optional(),
     // Body
     neck: bodyMeasurementSchema.optional(),
     shoulders: bodyMeasurementSchema.optional(),
     chest: bodyMeasurementSchema.optional(),
     waist: bodyMeasurementSchema.optional(),
-    leftBiceps: bodyMeasurementSchema.optional(),
-    rightBiceps: bodyMeasurementSchema.optional(),
+    leftBicep: bodyMeasurementSchema.optional(),
+    rightBicep: bodyMeasurementSchema.optional(),
     leftForearm: bodyMeasurementSchema.optional(),
     rightForearm: bodyMeasurementSchema.optional(),
     leftThigh: bodyMeasurementSchema.optional(),

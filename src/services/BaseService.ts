@@ -1,6 +1,20 @@
 import { Setting } from '@/models/Setting'
-import { DurationEnum, DurationMSEnum, SettingIdEnum, StatusEnum, TableEnum } from '@/shared/enums'
-import type { IdType, LogType, SelectOption, ServiceType, SettingValueType } from '@/shared/types'
+import {
+    DurationEnum,
+    DurationMSEnum,
+    MeasurementFieldEnum,
+    SettingIdEnum,
+    StatusEnum,
+    TableEnum,
+} from '@/shared/enums'
+import type {
+    IdType,
+    LogType,
+    MeasurementType,
+    SelectOption,
+    ServiceType,
+    SettingValueType,
+} from '@/shared/types'
 import { truncateText } from '@/shared/utils'
 import { liveQuery, type Observable } from 'dexie'
 import type { QDialogOptions, QTableColumn } from 'quasar'
@@ -100,8 +114,10 @@ export abstract class BaseService {
         throw new Error(`Not supported by the ${this.labelSingular} Service`)
     }
 
-    // eslint-disable-next-line
-    createDialogOptions(parentId?: IdType): QDialogOptions {
+    createDialogOptions(
+        parentId?: IdType, // eslint-disable-line
+        measurementField?: MeasurementFieldEnum, // eslint-disable-line
+    ): QDialogOptions {
         throw new Error(`Not supported by the ${this.labelSingular} Service`)
     }
 
@@ -207,6 +223,20 @@ export abstract class BaseService {
         } else {
             return liveQuery(() => this.db.table(this.table).toArray())
         }
+    }
+
+    /**
+     * Returns a live query of the last measurement record for the specified field.
+     */
+    liveMeasurement(field: MeasurementFieldEnum): Observable<MeasurementType> {
+        return liveQuery(() =>
+            this.db
+                .table(TableEnum.MEASUREMENTS)
+                .orderBy('createdAt')
+                .filter((record) => record.field === field)
+                .reverse()
+                .first(),
+        )
     }
 
     /**

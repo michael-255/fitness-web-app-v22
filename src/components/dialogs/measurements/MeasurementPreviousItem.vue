@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import { MeasurementServInst } from '@/services/MeasurementService'
+import type { MeasurementFieldEnum } from '@/shared/enums'
 import { editIcon, openDialogIcon } from '@/shared/icons'
-import type { TimestampType } from '@/shared/types'
+import type { IdType, TimestampType } from '@/shared/types'
 import { compactDateFromMs, timeAgo } from '@/shared/utils'
 import { useQuasar } from 'quasar'
 
 defineProps<{
     title: string
+    measurementField: MeasurementFieldEnum
+    previousId?: IdType
     previousValue?: string
     previousCreatedAt?: TimestampType
-    valueSuffix?: string
+    valueSuffix: string
 }>()
 
 const $q = useQuasar()
@@ -24,7 +28,7 @@ const $q = useQuasar()
 
                         <q-item-label v-if="previousValue" class="text-h5 text-cyan">
                             {{ previousValue }}
-                            <span v-if="valueSuffix" class="text-caption">{{ valueSuffix }}</span>
+                            <span v-if="previousId" class="text-caption">{{ valueSuffix }}</span>
                         </q-item-label>
 
                         <q-item-label v-else class="text-h5 text-cyan"> - </q-item-label>
@@ -33,11 +37,17 @@ const $q = useQuasar()
                     <q-item-section top side>
                         <div class="row btn-translation">
                             <q-btn
-                                :disable="!previousValue || $q.loading.isActive"
+                                :disable="!previousId || $q.loading.isActive"
                                 :icon="editIcon"
-                                color="amber"
+                                :color="!previousId || $q.loading.isActive ? 'grey' : 'amber'"
                                 round
                                 flat
+                                @click="
+                                    () =>
+                                        $q.dialog(
+                                            MeasurementServInst.editDialogOptions(previousId!),
+                                        )
+                                "
                             />
                             <q-btn
                                 :disable="$q.loading.isActive"
@@ -45,6 +55,14 @@ const $q = useQuasar()
                                 color="positive"
                                 round
                                 flat
+                                @click="
+                                    () =>
+                                        $q.dialog(
+                                            MeasurementServInst.createDialogOptions(
+                                                measurementField,
+                                            ),
+                                        )
+                                "
                             />
                         </div>
                     </q-item-section>

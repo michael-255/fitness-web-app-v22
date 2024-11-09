@@ -1,6 +1,6 @@
 import { TableEnum } from '@/shared/enums'
 import type {
-    BloodPressureType,
+    BloodPressureReadingType,
     BodyMeasurementType,
     BodyWeightType,
     CaloriesType,
@@ -20,16 +20,18 @@ interface MeasurementParams {
     createdAt?: TimestampType
     note?: TextAreaType
     field: MeasurementFieldType // Required, not defaulted
-    // Diet & Weight
+    // Diet
     calories?: CaloriesType
     carbs?: NutritionType
     fat?: NutritionType
     protein?: NutritionType
+    // Weight
     weight?: BodyWeightType
     bodyFat?: PercentType
     // Health
     temperature?: TemperatureType
-    bloodPressure?: BloodPressureType
+    bloodPressureSystolic?: BloodPressureReadingType
+    bloodPressureDiastolic?: BloodPressureReadingType
     bloodOxygen?: PercentType
     // Body
     neck?: BodyMeasurementType
@@ -62,16 +64,18 @@ export class Measurement {
     createdAt: TimestampType
     note: TextAreaType
     field: MeasurementFieldType
-    // Diet & Weight
+    // Diet
     calories?: CaloriesType
     carbs?: NutritionType
     fat?: NutritionType
     protein?: NutritionType
+    // Weight
     weight?: BodyWeightType
     bodyFat?: PercentType
     // Health
     temperature?: TemperatureType
-    bloodPressure?: BloodPressureType
+    bloodPressureSystolic?: BloodPressureReadingType
+    bloodPressureDiastolic?: BloodPressureReadingType
     bloodOxygen?: PercentType
     // Body
     neck?: BodyMeasurementType
@@ -97,16 +101,18 @@ export class Measurement {
         this.createdAt = params.createdAt ?? Date.now()
         this.note = params.note ?? ''
         this.field = params.field // Required, not defaulted
-        // Diet & Weight
+        // Diet
         this.calories = params.calories ?? undefined
         this.carbs = params.carbs ?? undefined
         this.fat = params.fat ?? undefined
         this.protein = params.protein ?? undefined
+        // Weight
         this.weight = params.weight ?? undefined
         this.bodyFat = params.bodyFat ?? undefined
         // Health
         this.temperature = params.temperature ?? undefined
-        this.bloodPressure = params.bloodPressure ?? undefined
+        this.bloodPressureSystolic = params.bloodPressureSystolic ?? undefined
+        this.bloodPressureDiastolic = params.bloodPressureDiastolic ?? undefined
         this.bloodOxygen = params.bloodOxygen ?? undefined
         // Body
         this.neck = params.neck ?? undefined

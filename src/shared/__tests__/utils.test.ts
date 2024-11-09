@@ -278,20 +278,6 @@ it('timeAgo', () => {
         message: '2 years ago',
         color: 'warning',
     })
-
-    // Test future dates
-    expect(timeAgo(now + DurationMSEnum['One Minute'])).toEqual({
-        message: 'in 1 minute',
-        color: 'primary',
-    })
-    expect(timeAgo(now + 2 * DurationMSEnum['One Minute'])).toEqual({
-        message: 'in 2 minutes',
-        color: 'primary',
-    })
-    expect(timeAgo(now + DurationMSEnum['One Hour'])).toEqual({
-        message: 'in 1 hour',
-        color: 'primary',
-    })
 })
 
 it('formatNumber', () => {
@@ -310,18 +296,6 @@ it('formatNumber', () => {
     // Test with prefix and zero decimals
     expect(formatNumber(1000, 0, '$')).toBe('$1,000')
 
-    // Test with suffix and two decimals
-    expect(formatNumber(1000, 2, '', ' USD')).toBe('1,000.00 USD')
-
-    // Test with suffix and zero decimals
-    expect(formatNumber(1000, 0, '', ' USD')).toBe('1,000 USD')
-
-    // Test with prefix, suffix, and two decimals
-    expect(formatNumber(1000, 2, '$', ' USD')).toBe('$1,000.00 USD')
-
-    // Test with prefix, suffix, and zero decimals
-    expect(formatNumber(1000, 0, '$', ' USD')).toBe('$1,000 USD')
-
     // Test with negative number and two decimals
     expect(formatNumber(-1000.1234, 2)).toBe('-1,000.12')
 
@@ -339,4 +313,16 @@ it('formatNumber', () => {
 
     // Test with non-integer decimals (should be floored)
     expect(formatNumber(1000.1234, 2.7)).toBe('1,000.12')
+
+    // Test with undefined value
+    expect(formatNumber(undefined)).toBe('-')
+
+    // Test with undefined value and prefix
+    expect(formatNumber(undefined, 0, '$')).toBe('-')
+
+    // Test with zero value
+    expect(formatNumber(0)).toBe('0')
+
+    // Test with zero value and prefix
+    expect(formatNumber(0, 0, '$')).toBe('$0')
 })

@@ -1,12 +1,57 @@
 <script setup lang="ts">
+import useLogger from '@/composables/useLogger'
+import { MeasurementServInst } from '@/services/MeasurementService'
 import { MeasurementFieldEnum } from '@/shared/enums'
 import { closeIcon, weightModuleIcon } from '@/shared/icons'
+import type { MeasurementType } from '@/shared/types'
 import { formatNumber } from '@/shared/utils'
 import { useDialogPluginComponent } from 'quasar'
+import { onUnmounted, ref, type Ref } from 'vue'
 import MeasurementPreviousItem from './MeasurementPreviousItem.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
+
+const { log } = useLogger()
+
+const createSubscription = (
+    field: MeasurementFieldEnum,
+    liveRef: Ref<MeasurementType | undefined>,
+    finishedRef: Ref<boolean>,
+) => {
+    return MeasurementServInst.liveMeasurement(field).subscribe({
+        next: (record) => {
+            liveRef.value = record
+            finishedRef.value = true
+        },
+        error: (error) => {
+            log.error(`Error loading live ${MeasurementServInst.labelPlural} data`, error as Error)
+            finishedRef.value = true
+        },
+    })
+}
+
+const bodyWeightSubscriptionFinished = ref(false)
+const bodyFatSubscriptionFinished = ref(false)
+
+const liveBodyWeight: Ref<MeasurementType | undefined> = ref(undefined)
+const liveBodyFat: Ref<MeasurementType | undefined> = ref(undefined)
+
+const bodyWeightSubscription = createSubscription(
+    MeasurementFieldEnum.BODY_WEIGHT,
+    liveBodyWeight,
+    bodyWeightSubscriptionFinished,
+)
+const bodyFatSubscription = createSubscription(
+    MeasurementFieldEnum.BODY_FAT,
+    liveBodyFat,
+    bodyFatSubscriptionFinished,
+)
+
+onUnmounted(() => {
+    bodyWeightSubscription.unsubscribe()
+    bodyFatSubscription.unsubscribe()
+})
 </script>
 
 <template>
@@ -30,15 +75,19 @@ const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
                         <q-list padding>
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.BODY_WEIGHT"
-                                :previous-value="formatNumber(175)"
-                                :previous-created-at="Date.now()"
+                                :measurement-field="MeasurementFieldEnum.BODY_WEIGHT"
+                                :previous-id="liveBodyWeight?.id"
+                                :previous-value="formatNumber(liveBodyWeight?.bodyWeight, 1)"
+                                :previous-created-at="liveBodyWeight?.createdAt"
                                 value-suffix="lbs"
                             />
 
                             <MeasurementPreviousItem
                                 :title="MeasurementFieldEnum.BODY_FAT"
-                                :previous-value="formatNumber(19.78, 1)"
-                                :previous-created-at="Date.now() - 10000000000"
+                                :measurement-field="MeasurementFieldEnum.BODY_FAT"
+                                :previous-id="liveBodyFat?.id"
+                                :previous-value="formatNumber(liveBodyFat?.bodyFat, 1)"
+                                :previous-created-at="liveBodyFat?.createdAt"
                                 value-suffix="%"
                             />
                         </q-list>

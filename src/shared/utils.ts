@@ -76,7 +76,19 @@ export function hiddenTableColumn(rowPropertyName: string): QTableColumn {
 export function tableColumn(
     rowPropertyName: string,
     label: string,
-    format?: 'UUID' | 'TEXT' | 'BOOL' | 'JSON' | 'DATE' | 'LIST-COUNT' | 'LIST-PRINT' | 'SETTING',
+    format?:
+        | 'UUID'
+        | 'TEXT'
+        | 'BOOL'
+        | 'JSON'
+        | 'DATE'
+        | 'LIST-COUNT'
+        | 'LIST-PRINT'
+        | 'SETTING'
+        | 'MONEY'
+        | 'NO_DECIMAL'
+        | 'ONE_DECIMAL'
+        | 'TWO_DECIMAL',
 ): QTableColumn {
     // Initial column properties
     const tableColumn: QTableColumn = {
@@ -130,6 +142,22 @@ export function tableColumn(
                     return `${val}`
                 }
             }
+            return tableColumn
+        case 'MONEY':
+            // Formats the number as money
+            tableColumn.format = (val: number) => formatNumber(val, 2, '$')
+            return tableColumn
+        case 'NO_DECIMAL':
+            // Formats the number with no decimal places
+            tableColumn.format = (val: number) => formatNumber(val, 0)
+            return tableColumn
+        case 'ONE_DECIMAL':
+            // Formats the number with one decimal place
+            tableColumn.format = (val: number) => formatNumber(val, 1)
+            return tableColumn
+        case 'TWO_DECIMAL':
+            // Formats the number with two decimal places
+            tableColumn.format = (val: number) => formatNumber(val, 2)
             return tableColumn
         default:
             // STRING: Default just converts the result to a string as is with no length limit
@@ -298,22 +326,32 @@ export function timeAgo(milliseconds: number): { message: string; color: string 
 }
 
 /**
- * Returns a formatted number with commas and options for decimal places, prefix, and suffix.
+ * Returns a formatted number with commas and options for decimal places, and prefix. A dash string
+ * is returned if the value is undefined.
  * @param value The number to format
  * @param decimals Decimals to show
  * @param prefix Optional prefix to add to the number
- * @param suffix Optional suffix to add to the number
  * @returns `$1,000.00`
  */
-export function formatNumber(
-    value: number,
-    decimals: number = 0,
-    prefix: string = '',
-    suffix: string = '',
-) {
+export function formatNumber(value: number | undefined, decimals: number = 0, prefix: string = '') {
+    if (value === undefined) {
+        return '-'
+    }
+
     const cleanDecimals = Math.abs(Math.floor(decimals))
-    return `${prefix}${value.toLocaleString('en-US', {
+
+    let formattedNumber = value.toLocaleString('en-US', {
         minimumFractionDigits: cleanDecimals,
         maximumFractionDigits: cleanDecimals,
-    })}${suffix}`
+    })
+
+    // Trims off "0" decimals if the number is an integer, except for dollar amounts
+    if (prefix !== '$') {
+        const parts = formattedNumber.split('.')
+        if (parts.length > 1 && /^0+$/.test(parts[1])) {
+            formattedNumber = parts[0]
+        }
+    }
+
+    return `${prefix}${formattedNumber}`
 }

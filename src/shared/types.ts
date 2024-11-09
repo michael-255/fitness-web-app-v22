@@ -3,7 +3,6 @@ import type { Component } from 'vue'
 import { z } from 'zod'
 import type {
     bloodPressureReadingSchema,
-    bloodPressureSchema,
     bodyMeasurementSchema,
     bodyWeightSchema,
     caloriesSchema,
@@ -122,7 +121,6 @@ export type CholesterolType = z.infer<typeof cholesterolSchema>
 export type PercentType = z.infer<typeof percentSchema>
 export type TemperatureType = z.infer<typeof temperatureSchema>
 export type BloodPressureReadingType = z.infer<typeof bloodPressureReadingSchema>
-export type BloodPressureType = z.infer<typeof bloodPressureSchema>
 export type BodyMeasurementType = z.infer<typeof bodyMeasurementSchema>
 export type MeasurementType = z.infer<typeof measurementSchema>
 

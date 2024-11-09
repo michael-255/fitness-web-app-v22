@@ -149,14 +149,10 @@ export enum MeasurementFieldEnum {
     SHOULDERS = 'Shoulders',
     CHEST = 'Chest',
     WAIST = 'Waist',
-    LEFT_BICEP = 'Left Bicep',
-    RIGHT_BICEP = 'Right Bicep',
-    LEFT_FOREARM = 'Left Forearm',
-    RIGHT_FOREARM = 'Right Forearm',
-    LEFT_THIGH = 'Left Thigh',
-    RIGHT_THIGH = 'Right Thigh',
-    LEFT_CALF = 'Left Calf',
-    RIGHT_CALF = 'Right Calf',
+    BICEPS = 'Biceps',
+    FOREARMS = 'Forearms',
+    THIGHS = 'Thighs',
+    CALVES = 'Calves',
     // Lab Work
     CHOLESTEROL = 'Cholesterol', // mg/dL
     CHOLESTEROL_HDL = 'Cholesterol HDL', // mg/dL

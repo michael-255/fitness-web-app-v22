@@ -53,7 +53,7 @@ const $q = useQuasar()
                     <q-item-section top side>
                         <div class="row btn-translation">
                             <q-btn
-                                :disable="!record?.lastChild?.createdAt || $q.loading.isActive"
+                                :disable="$q.loading.isActive"
                                 :icon="
                                     record?.status.includes(StatusEnum.FAVORITED)
                                         ? favoriteOnIcon
@@ -97,7 +97,15 @@ const $q = useQuasar()
                                             "
                                         >
                                             <q-item-section avatar>
-                                                <q-icon color="cyan" :name="chartsIcon" />
+                                                <q-icon
+                                                    :color="
+                                                        !record?.lastChild?.createdAt ||
+                                                        $q.loading.isActive
+                                                            ? 'grey'
+                                                            : 'cyan'
+                                                    "
+                                                    :name="chartsIcon"
+                                                />
                                             </q-item-section>
 
                                             <q-item-section>Charts</q-item-section>
@@ -115,7 +123,12 @@ const $q = useQuasar()
                                             "
                                         >
                                             <q-item-section avatar>
-                                                <q-icon color="primary" :name="inspectIcon" />
+                                                <q-icon
+                                                    :color="
+                                                        $q.loading.isActive ? 'grey' : 'primary'
+                                                    "
+                                                    :name="inspectIcon"
+                                                />
                                             </q-item-section>
 
                                             <q-item-section>Inspect</q-item-section>
@@ -134,7 +147,16 @@ const $q = useQuasar()
                                             "
                                         >
                                             <q-item-section avatar>
-                                                <q-icon color="amber" :name="editIcon" />
+                                                <q-icon
+                                                    :color="
+                                                        record?.status.includes(
+                                                            StatusEnum.LOCKED,
+                                                        ) || $q.loading.isActive
+                                                            ? 'grey'
+                                                            : 'amber'
+                                                    "
+                                                    :name="editIcon"
+                                                />
                                             </q-item-section>
 
                                             <q-item-section>Edit</q-item-section>
@@ -155,7 +177,16 @@ const $q = useQuasar()
                                             "
                                         >
                                             <q-item-section avatar>
-                                                <q-icon color="negative" :name="deleteIcon" />
+                                                <q-icon
+                                                    :color="
+                                                        record?.status.includes(
+                                                            StatusEnum.LOCKED,
+                                                        ) || $q.loading.isActive
+                                                            ? 'grey'
+                                                            : 'negative'
+                                                    "
+                                                    :name="deleteIcon"
+                                                />
                                             </q-item-section>
 
                                             <q-item-section>Delete</q-item-section>

@@ -14,7 +14,7 @@ const isDisabled = computed(() => $q.loading.isActive || selectedStore.lockedSta
 </script>
 
 <template>
-    <BaseFormItem label="Note" description="Optional description for this record.">
+    <BaseFormItem label="Note" description="Optional note for this record.">
         <q-item-label>
             <q-input
                 v-model="selectedStore.record.note"
