@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import DashboardMeasurementItem from '@/components/dashboard/DashboardMeasurementItem.vue'
 import DialogChartMeasurementsDiet from '@/components/dialogs/chart/DialogChartMeasurementsDiet.vue'
+import DialogChartMeasurementsHealth from '@/components/dialogs/chart/DialogChartMeasurementsHealth.vue'
+import DialogChartMeasurementsWeight from '@/components/dialogs/chart/DialogChartMeasurementsWeight.vue'
 import DialogBodyModule from '@/components/dialogs/measurements/DialogBodyModule.vue'
 import DialogDietModule from '@/components/dialogs/measurements/DialogDietModule.vue'
 import DialogHealthModule from '@/components/dialogs/measurements/DialogHealthModule.vue'
@@ -9,9 +11,10 @@ import DialogWeightModule from '@/components/dialogs/measurements/DialogWeightMo
 import PageFabMenu from '@/components/page/PageFabMenu.vue'
 import PageHeading from '@/components/page/PageHeading.vue'
 import PageResponsive from '@/components/page/PageResponsive.vue'
+import useLogger from '@/composables/useLogger'
 import { MeasurementServInst } from '@/services/MeasurementService'
 import { appName } from '@/shared/constants'
-import { RouteNameEnum, TableEnum } from '@/shared/enums'
+import { MeasurementFieldEnum, RouteNameEnum, TableEnum } from '@/shared/enums'
 import {
     addIcon,
     bodyModuleIcon,
@@ -21,13 +24,72 @@ import {
     measurementsPageIcon,
     weightModuleIcon,
 } from '@/shared/icons'
+import type { MeasurementType } from '@/shared/types'
 import { useMeta, useQuasar } from 'quasar'
+import { onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 useMeta({ title: `${appName} - Measurements Dashboard` })
 
 const $q = useQuasar()
 const router = useRouter()
+const { log } = useLogger()
+
+const subscriptionFinished = ref(false)
+
+const hasDietRecords = ref(false)
+const hasWeightRecords = ref(false)
+const hasHealthRecords = ref(false)
+const hasBodyRecords = ref(false)
+const hasLabWorkRecords = ref(false)
+
+const dietFields = [
+    MeasurementFieldEnum.CALORIES,
+    MeasurementFieldEnum.CARBS,
+    MeasurementFieldEnum.FAT,
+    MeasurementFieldEnum.PROTEIN,
+]
+const weightFields = [MeasurementFieldEnum.BODY_WEIGHT, MeasurementFieldEnum.BODY_FAT]
+const healthFields = [
+    MeasurementFieldEnum.TEMPERATURE,
+    MeasurementFieldEnum.BLOOD_PRESSURE,
+    MeasurementFieldEnum.BLOOD_OXYGEN,
+]
+const bodyFields = [
+    MeasurementFieldEnum.NECK,
+    MeasurementFieldEnum.SHOULDERS,
+    MeasurementFieldEnum.CHEST,
+    MeasurementFieldEnum.WAIST,
+    MeasurementFieldEnum.BICEPS,
+    MeasurementFieldEnum.FOREARMS,
+    MeasurementFieldEnum.THIGHS,
+    MeasurementFieldEnum.CALVES,
+]
+const labWorkFields = [
+    MeasurementFieldEnum.CHOLESTEROL,
+    MeasurementFieldEnum.CHOLESTEROL_HDL,
+    MeasurementFieldEnum.CHOLESTEROL_LDL,
+    MeasurementFieldEnum.HEMOGLOBIN_A1C,
+]
+
+const subscription = MeasurementServInst.liveTable<MeasurementType>().subscribe({
+    next: (records) => {
+        hasDietRecords.value = records.some((record) => dietFields.includes(record.field))
+        hasWeightRecords.value = records.some((record) => weightFields.includes(record.field))
+        hasHealthRecords.value = records.some((record) => healthFields.includes(record.field))
+        hasBodyRecords.value = records.some((record) => bodyFields.includes(record.field))
+        hasLabWorkRecords.value = records.some((record) => labWorkFields.includes(record.field))
+        subscriptionFinished.value = true
+    },
+    error: (error) => {
+        log.error(`Error loading live ${MeasurementServInst.labelPlural} data`, error as Error)
+        subscriptionFinished.value = true
+    },
+})
+
+onUnmounted(() => {
+    subscription.unsubscribe()
+})
 </script>
 
 <template>
@@ -64,7 +126,7 @@ const router = useRouter()
                 title="Diet"
                 description="The Diet module tracks key nutritional information. These measurements can be used to assess nutritional adequacy and monitor dietary patterns."
                 :icon="dietModuleIcon"
-                :hasRecords="true"
+                :hasRecords="hasDietRecords"
                 @onCharts="() => $q.dialog({ component: DialogChartMeasurementsDiet })"
                 @onAccessModule="() => $q.dialog({ component: DialogDietModule })"
             />
@@ -73,8 +135,8 @@ const router = useRouter()
                 title="Weight"
                 description="The Weight module tracks body composition metrics. These measurements provide insight into weight-related health indicators."
                 :icon="weightModuleIcon"
-                :hasRecords="false"
-                @onCharts="() => console.log('Weight charts clicked')"
+                :hasRecords="hasWeightRecords"
+                @onCharts="() => $q.dialog({ component: DialogChartMeasurementsWeight })"
                 @onAccessModule="() => $q.dialog({ component: DialogWeightModule })"
             />
 
@@ -82,8 +144,8 @@ const router = useRouter()
                 title="Health"
                 description="The Health module tracks vital health indicators providing essential data for monitoring overall health."
                 :icon="healthModuleIcon"
-                :hasRecords="false"
-                @onCharts="() => console.log('Health charts clicked')"
+                :hasRecords="hasHealthRecords"
+                @onCharts="() => $q.dialog({ component: DialogChartMeasurementsHealth })"
                 @onAccessModule="() => $q.dialog({ component: DialogHealthModule })"
             />
 
@@ -91,7 +153,7 @@ const router = useRouter()
                 title="Body"
                 description="The Body module tracks various physical dimension measurements which provide a detailed overview of an individual's body composition and physical attributes."
                 :icon="bodyModuleIcon"
-                :hasRecords="false"
+                :hasRecords="hasBodyRecords"
                 @onCharts="() => console.log('Body charts clicked')"
                 @onAccessModule="() => $q.dialog({ component: DialogBodyModule })"
             />
@@ -100,7 +162,7 @@ const router = useRouter()
                 title="Lab Work"
                 description="The Lab Work module tracks various blood measurements. These measurements provide a detailed overview of an individual's blood health and can be used to assess cardiovascular risk and monitor conditions such as diabetes."
                 :icon="labWorkModuleIcon"
-                :hasRecords="false"
+                :hasRecords="hasLabWorkRecords"
                 @onCharts="() => console.log('Lab Work charts clicked')"
                 @onAccessModule="() => $q.dialog({ component: DialogLabWorkModule })"
             />

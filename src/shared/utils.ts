@@ -3,7 +3,7 @@ import type { ChartOptions, TooltipItem } from 'chart.js'
 import { enUS } from 'date-fns/locale'
 import { date, uid, type QTableColumn } from 'quasar'
 import { tableSchema } from './schemas'
-import type { IdType, SettingValueType, TimestampType } from './types'
+import type { IdType, MeasurementType, SettingValueType } from './types'
 
 /**
  * Creates an Id with the table encoded in the prefix. Encoding this extra information helps with
@@ -491,41 +491,39 @@ export function createTimelineChartOptions(
 }
 
 /**
- * Returns timelined records for use in chart datasets.
+ * Returns timelined records for use in chart datasets that also include a way to determine if the
+ * data should be displayed in a one year chart or an all time chart.
  * @param allRecords Array of records from a table
+ * @param property Property to chart
+ * @returns
  */
-export function getTimelinedRecords<T extends { createdAt: TimestampType }>(
-    allRecords: T[],
+export function getMeasurementTimelinedRecords(
+    allRecords: MeasurementType[],
+    property: string,
 ): {
-    threeMonths: T[]
-    oneYear: T[]
-    allTime: T[]
-    hasRecords: boolean
-    hasRecordsBeyondThreeMonths: boolean
-    hasRecordsBeyondOneYear: boolean
+    showOneYearChart: boolean
+    showAllTimeChart: boolean
+    oneYearData: { x: number; y: number }[]
+    allTimeData: { x: number; y: number }[]
 } {
-    const now = Date.now()
-    const threeMonthsAgo = now - DurationMSEnum['Three Months']
-    const oneYearAgo = now - DurationMSEnum['One Year']
+    const oneYearRecords = allRecords.filter(
+        (record) => record.createdAt > Date.now() - DurationMSEnum['One Year'],
+    )
 
-    const recordsThreeMonths = allRecords.filter((record) => record.createdAt >= threeMonthsAgo)
-    const recordsOneYear = allRecords.filter((record) => record.createdAt >= oneYearAgo)
+    const oneYearDataset = oneYearRecords.map((record: Record<string, any>) => ({
+        x: record.createdAt,
+        y: record[property],
+    }))
 
-    const allCount = allRecords.length
-    const threeMonthCount = recordsThreeMonths.length
-    const oneYearCount = recordsOneYear.length
-
-    // Determine if there are records beyond the three month and one year thresholds
-    const hasRecords = allCount > 0
-    const hasRecordsBeyondThreeMonths = allCount - threeMonthCount > 0
-    const hasRecordsBeyondOneYear = allCount - oneYearCount > 0
+    const allTimeDataset = allRecords.map((record: Record<string, any>) => ({
+        x: record.createdAt,
+        y: record[property],
+    }))
 
     return {
-        threeMonths: recordsThreeMonths,
-        oneYear: recordsOneYear,
-        allTime: allRecords,
-        hasRecords,
-        hasRecordsBeyondThreeMonths,
-        hasRecordsBeyondOneYear,
+        showOneYearChart: oneYearRecords.length > 0,
+        showAllTimeChart: allRecords.length > 0,
+        oneYearData: oneYearDataset,
+        allTimeData: allTimeDataset,
     }
 }
