@@ -1,4 +1,3 @@
-import DialogChartActivityWorkouts from '@/components/dialogs/chart/DialogChartActivityWorkouts.vue'
 import DialogChartWorkout from '@/components/dialogs/chart/DialogChartWorkout.vue'
 import DialogCreate from '@/components/dialogs/DialogCreate.vue'
 import DialogDelete from '@/components/dialogs/DialogDelete.vue'
@@ -50,20 +49,12 @@ export class WorkoutService extends BaseService {
         tableColumn('nextWorkoutIds', 'Next records', 'LIST-PRINT'),
     ]
     supportsColumnFilters = true
-    supportsActivityCharts = true
+    supportsActivityCharts = false
     supportsCharts = true
     supportsInspect = true
     supportsCreate = true
     supportsEdit = true
     supportsDelete = true
-
-    /**
-     * Returns QDialogOptions options for the chart dialog.
-     * @example $q.dialog(service.activityChartsDialogOptions(id))
-     */
-    activityChartsDialogOptions(): QDialogOptions {
-        return { component: DialogChartActivityWorkouts }
-    }
 
     /**
      * Returns QDialogOptions options for the chart dialog.

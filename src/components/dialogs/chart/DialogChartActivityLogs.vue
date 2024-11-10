@@ -4,7 +4,7 @@ import { LogServInst } from '@/services/LogService'
 import { LogLevelEnum } from '@/shared/enums'
 import { chartsIcon, closeIcon } from '@/shared/icons'
 import type { LogType } from '@/shared/types'
-import { compactDateFromMs } from '@/shared/utils'
+import { createActivityChartOptions } from '@/shared/utils'
 import {
     Chart as ChartJS,
     Legend,
@@ -15,10 +15,8 @@ import {
     Tooltip,
     type ChartData,
     type ChartOptions,
-    type TooltipItem,
 } from 'chart.js'
 import 'chartjs-adapter-date-fns'
-import { enUS } from 'date-fns/locale'
 import { colors, useDialogPluginComponent } from 'quasar'
 import { computed, onUnmounted, ref, type ComputedRef, type Ref } from 'vue'
 import { Scatter } from 'vue-chartjs'
@@ -51,71 +49,9 @@ const subscription = LogServInst.liveTable<LogType>().subscribe({
     },
 })
 
-const chartOptions: ChartOptions<'scatter'> = {
-    responsive: true,
-    aspectRatio: 1,
-    elements: {
-        point: {
-            radius: 4,
-        },
-    },
-    plugins: {
-        title: {
-            display: true,
-            text: 'Log Activity - Last 3 Months',
-            color: 'white',
-            font: {
-                size: 14,
-            },
-        },
-        legend: {
-            display: true,
-            position: 'top',
-            align: 'center',
-        },
-        tooltip: {
-            callbacks: {
-                label: (context: TooltipItem<'scatter'>) => {
-                    return compactDateFromMs(context.parsed.x)
-                },
-            },
-        },
-    },
-    scales: {
-        x: {
-            type: 'time',
-            time: {
-                unit: 'day',
-            },
-            adapters: {
-                date: {
-                    locale: enUS,
-                },
-            },
-            ticks: {
-                autoSkip: true,
-                maxRotation: 60,
-                minRotation: 60,
-            },
-        },
-        y: {
-            type: 'linear',
-            min: 0,
-            max: 86400, // Number of seconds in a day
-            ticks: {
-                stepSize: 21600, // One hour in seconds
-                callback: function (value: number | string) {
-                    const seconds = Number(value)
-                    if (seconds === 0) return 'Morning'
-                    if (seconds === 21600) return '6 AM'
-                    if (seconds === 43200) return 'Noon'
-                    if (seconds === 64800) return '6 PM'
-                    if (seconds === 86400) return 'Evening'
-                },
-            },
-        },
-    },
-}
+const chartOptions: ChartOptions<'scatter'> = createActivityChartOptions(
+    `${LogServInst.labelSingular} Activity - Last 3 Months`,
+)
 
 const chartData: ComputedRef<ChartData<'scatter', { x: number; y: number }[]>> = computed(() => {
     const infoLogs = liveRecords.value.filter((record) => record.logLevel === LogLevelEnum.INFO)

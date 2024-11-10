@@ -19,7 +19,7 @@ const createSubscription = (
     liveRef: Ref<MeasurementType | undefined>,
     finishedRef: Ref<boolean>,
 ) => {
-    return MeasurementServInst.liveMeasurement(field).subscribe({
+    return MeasurementServInst.liveMeasurementField(field).subscribe({
         next: (record) => {
             liveRef.value = record
             finishedRef.value = true

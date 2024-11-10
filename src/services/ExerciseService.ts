@@ -1,4 +1,3 @@
-import DialogChartActivityExercises from '@/components/dialogs/chart/DialogChartActivityExercises.vue'
 import DialogChartExercise from '@/components/dialogs/chart/DialogChartExercise.vue'
 import DialogCreate from '@/components/dialogs/DialogCreate.vue'
 import DialogDelete from '@/components/dialogs/DialogDelete.vue'
@@ -50,20 +49,12 @@ export class ExerciseService extends BaseService {
         tableColumn('tabataTimer', 'Tabata Timer Settings', 'JSON'),
     ]
     supportsColumnFilters = true
-    supportsActivityCharts = true
+    supportsActivityCharts = false
     supportsCharts = true
     supportsInspect = true
     supportsCreate = true
     supportsEdit = true
     supportsDelete = true
-
-    /**
-     * Returns QDialogOptions options for the chart dialog.
-     * @example $q.dialog(service.activityChartsDialogOptions(id))
-     */
-    activityChartsDialogOptions(): QDialogOptions {
-        return { component: DialogChartActivityExercises }
-    }
 
     /**
      * Returns QDialogOptions options for the chart dialog.

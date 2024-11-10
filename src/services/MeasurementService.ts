@@ -1,4 +1,3 @@
-import DialogChartActivityMeasurements from '@/components/dialogs/chart/DialogChartActivityMeasurements.vue'
 import DialogChartMeasurement from '@/components/dialogs/chart/DialogChartMeasurement.vue'
 import DialogCreate from '@/components/dialogs/DialogCreate.vue'
 import DialogDelete from '@/components/dialogs/DialogDelete.vue'
@@ -71,20 +70,12 @@ export class MeasurementService extends BaseService {
         tableColumn('hemoglobinA1C', 'Hemoglobin A1C', 'ONE_DECIMAL'),
     ]
     supportsColumnFilters = true
-    supportsActivityCharts = true
-    supportsCharts = true
+    supportsActivityCharts = false
+    supportsCharts = false
     supportsInspect = true
     supportsCreate = true
     supportsEdit = true
     supportsDelete = true
-
-    /**
-     * Returns QDialogOptions options for the chart dialog.
-     * @example $q.dialog(service.activityChartsDialogOptions(id))
-     */
-    activityChartsDialogOptions(): QDialogOptions {
-        return { component: DialogChartActivityMeasurements }
-    }
 
     /**
      * Returns QDialogOptions options for the chart dialog.

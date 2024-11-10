@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DashboardMeasurementItem from '@/components/dashboard/DashboardMeasurementItem.vue'
+import DialogChartMeasurementsDiet from '@/components/dialogs/chart/DialogChartMeasurementsDiet.vue'
 import DialogBodyModule from '@/components/dialogs/measurements/DialogBodyModule.vue'
 import DialogDietModule from '@/components/dialogs/measurements/DialogDietModule.vue'
 import DialogHealthModule from '@/components/dialogs/measurements/DialogHealthModule.vue'
@@ -63,8 +64,8 @@ const router = useRouter()
                 title="Diet"
                 description="The Diet module tracks key nutritional information. These measurements can be used to assess nutritional adequacy and monitor dietary patterns."
                 :icon="dietModuleIcon"
-                :hasRecords="false"
-                @onCharts="() => console.log('Diet charts clicked')"
+                :hasRecords="true"
+                @onCharts="() => $q.dialog({ component: DialogChartMeasurementsDiet })"
                 @onAccessModule="() => $q.dialog({ component: DialogDietModule })"
             />
 

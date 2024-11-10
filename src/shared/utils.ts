@@ -1,7 +1,9 @@
 import { DurationMSEnum, TableEnum } from '@/shared/enums'
+import type { ChartOptions, TooltipItem } from 'chart.js'
+import { enUS } from 'date-fns/locale'
 import { date, uid, type QTableColumn } from 'quasar'
 import { tableSchema } from './schemas'
-import type { IdType, SettingValueType } from './types'
+import type { IdType, SettingValueType, TimestampType } from './types'
 
 /**
  * Creates an Id with the table encoded in the prefix. Encoding this extra information helps with
@@ -354,4 +356,176 @@ export function formatNumber(value: number | undefined, decimals: number = 0, pr
     }
 
     return `${prefix}${formattedNumber}`
+}
+
+/**
+ * Returns pre-configured options for a Chart.js table activity chart.
+ * @param label Label for the chart
+ */
+export function createActivityChartOptions(label: string): ChartOptions<'scatter'> {
+    return {
+        responsive: true,
+        aspectRatio: 1,
+        elements: {
+            point: {
+                radius: 4,
+            },
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: label,
+                color: 'white',
+                font: {
+                    size: 14,
+                },
+            },
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                callbacks: {
+                    label: (context: TooltipItem<'scatter'>) => {
+                        return compactDateFromMs(context.parsed.x)
+                    },
+                },
+            },
+        },
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    unit: 'day',
+                },
+                adapters: {
+                    date: {
+                        locale: enUS,
+                    },
+                },
+                ticks: {
+                    autoSkip: true,
+                    maxRotation: 60,
+                    minRotation: 60,
+                },
+            },
+            y: {
+                type: 'linear',
+                min: 0,
+                max: 86400, // Number of seconds in a day
+                ticks: {
+                    stepSize: 21600, // One hour in seconds
+                    callback: function (value: number | string) {
+                        const seconds = Number(value)
+                        if (seconds === 0) return 'Morning'
+                        if (seconds === 21600) return '6 AM'
+                        if (seconds === 43200) return 'Noon'
+                        if (seconds === 64800) return '6 PM'
+                        if (seconds === 86400) return 'Evening'
+                    },
+                },
+            },
+        },
+    }
+}
+
+/**
+ * Returns pre-configured options for a Chart.js table timeline chart.
+ * @param label Label for the chart
+ */
+export function createTimelineChartOptions(
+    label: string,
+    includeLegend?: boolean,
+): ChartOptions<'line'> {
+    return {
+        responsive: true,
+        aspectRatio: 1,
+        elements: {
+            point: {
+                radius: 3,
+            },
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: label,
+                color: 'white',
+                font: {
+                    size: 14,
+                },
+            },
+            legend: {
+                display: !!includeLegend,
+                position: 'top',
+                align: 'center',
+            },
+            tooltip: {
+                callbacks: {
+                    title: (context: TooltipItem<'line'>[]) => {
+                        return compactDateFromMs(context[0].parsed.x)
+                    },
+                    label: (context: TooltipItem<'line'>) => {
+                        return `${context.parsed.y}`
+                    },
+                },
+            },
+        },
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    unit: 'day',
+                },
+                adapters: {
+                    date: {
+                        locale: enUS,
+                    },
+                },
+                ticks: {
+                    autoSkip: true,
+                    maxRotation: 60,
+                    minRotation: 60,
+                },
+            },
+        },
+    }
+}
+
+/**
+ * Returns timelined records for use in chart datasets.
+ * @param allRecords Array of records from a table
+ */
+export function getTimelinedRecords<T extends { createdAt: TimestampType }>(
+    allRecords: T[],
+): {
+    threeMonths: T[]
+    oneYear: T[]
+    allTime: T[]
+    hasRecords: boolean
+    hasRecordsBeyondThreeMonths: boolean
+    hasRecordsBeyondOneYear: boolean
+} {
+    const now = Date.now()
+    const threeMonthsAgo = now - DurationMSEnum['Three Months']
+    const oneYearAgo = now - DurationMSEnum['One Year']
+
+    const recordsThreeMonths = allRecords.filter((record) => record.createdAt >= threeMonthsAgo)
+    const recordsOneYear = allRecords.filter((record) => record.createdAt >= oneYearAgo)
+
+    const allCount = allRecords.length
+    const threeMonthCount = recordsThreeMonths.length
+    const oneYearCount = recordsOneYear.length
+
+    // Determine if there are records beyond the three month and one year thresholds
+    const hasRecords = allCount > 0
+    const hasRecordsBeyondThreeMonths = allCount - threeMonthCount > 0
+    const hasRecordsBeyondOneYear = allCount - oneYearCount > 0
+
+    return {
+        threeMonths: recordsThreeMonths,
+        oneYear: recordsOneYear,
+        allTime: allRecords,
+        hasRecords,
+        hasRecordsBeyondThreeMonths,
+        hasRecordsBeyondOneYear,
+    }
 }

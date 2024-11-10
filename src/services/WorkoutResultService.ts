@@ -1,4 +1,3 @@
-import DialogChartActivityWorkoutResults from '@/components/dialogs/chart/DialogChartActivityWorkoutResults.vue'
 import DialogCreate from '@/components/dialogs/DialogCreate.vue'
 import DialogDelete from '@/components/dialogs/DialogDelete.vue'
 import DialogEdit from '@/components/dialogs/DialogEdit.vue'
@@ -42,7 +41,7 @@ export class WorkoutResultService extends BaseService {
         tableColumn('status', 'Status', 'LIST-PRINT'),
     ]
     supportsColumnFilters = true
-    supportsActivityCharts = true
+    supportsActivityCharts = false
     supportsCharts = false
     supportsInspect = true
     supportsCreate = true
@@ -54,14 +53,6 @@ export class WorkoutResultService extends BaseService {
      */
     parentService(): ServiceType {
         return WorkoutService.instance()
-    }
-
-    /**
-     * Returns QDialogOptions options for the chart dialog.
-     * @example $q.dialog(service.activityChartsDialogOptions(id))
-     */
-    activityChartsDialogOptions(): QDialogOptions {
-        return { component: DialogChartActivityWorkoutResults }
     }
 
     /**
@@ -168,7 +159,6 @@ export class WorkoutResultService extends BaseService {
      * TODO: Implement for charts.
      */
     async getChartDatasets(parentId: IdType) {
-        console.log('getChartDatasets', parentId)
         return {
             threeMonths: [],
             oneYear: [],

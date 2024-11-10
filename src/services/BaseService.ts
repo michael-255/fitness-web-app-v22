@@ -136,27 +136,6 @@ export abstract class BaseService {
         throw new Error(`Not supported by the ${this.labelSingular} Service`)
     }
 
-    // eslint-disable-next-line
-    async getChartDatasets(parentId: IdType): Promise<{
-        threeMonths: {
-            x: any
-            y: any
-        }[]
-        oneYear: {
-            x: any
-            y: any
-        }[]
-        allTime: {
-            x: any
-            y: any
-        }[]
-        hasRecords: boolean
-        hasRecordsBeyondThreeMonths: boolean
-        hasRecordsBeyondOneYear: boolean
-    }> {
-        throw new Error(`Not supported by the ${this.labelSingular} Service`)
-    }
-
     /**
      * Returns live query of a parent table with records that are not hidden with the remaining
      * sorted with locked records first, then favorited records, then alphabetically by name, and
@@ -226,9 +205,21 @@ export abstract class BaseService {
     }
 
     /**
+     * Returns records that are no older than the specified record age based on createdAt.
+     */
+    liveTimelineRecords<T>(recordAge: DurationMSEnum): Observable<T[]> {
+        return liveQuery(() =>
+            this.db
+                .table(this.table)
+                .filter((record) => record.createdAt >= recordAge)
+                .toArray(),
+        )
+    }
+
+    /**
      * Returns a live query of the last measurement record for the specified field.
      */
-    liveMeasurement(field: MeasurementFieldEnum): Observable<MeasurementType> {
+    liveMeasurementField(field: MeasurementFieldEnum): Observable<MeasurementType> {
         return liveQuery(() =>
             this.db
                 .table(TableEnum.MEASUREMENTS)
@@ -237,6 +228,17 @@ export abstract class BaseService {
                 .reverse()
                 .first(),
         )
+    }
+
+    /**
+     * Returns records ordered by createdAt and filtered by the specified property and value.
+     */
+    getRecordsByProperty<T>(property: string, equalsValue: any): Promise<T[]> {
+        return this.db
+            .table(this.table)
+            .orderBy('createdAt')
+            .filter((record) => record[property] === equalsValue)
+            .toArray()
     }
 
     /**
