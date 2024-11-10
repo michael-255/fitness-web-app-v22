@@ -5,8 +5,7 @@ features to track and enhance your workouts, exercises, and overall fitness jour
 
 ## TODO `Measurements`
 
--   `Inspect` dialog needs to be implemented
--   Dialog and Chart creation will be needed for this
+-   Charts dialogs
 
 ## TODO `Plans`
 

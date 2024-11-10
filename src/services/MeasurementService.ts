@@ -38,7 +38,7 @@ export class MeasurementService extends BaseService {
         tableColumn('createdAt', 'Created Date', 'DATE'),
         tableColumn('note', 'Note', 'TEXT'),
         tableColumn('field', 'Measurement Field'),
-        // Diet & Weight
+        // Diet
         tableColumn('calories', 'Calories', 'NO_DECIMAL'),
         tableColumn('carbs', 'Carbs', 'NO_DECIMAL'),
         tableColumn('fat', 'Fat', 'NO_DECIMAL'),
@@ -120,7 +120,120 @@ export class MeasurementService extends BaseService {
                         component: InspectItemString,
                         props: { label: 'Note', recordKey: 'note' },
                     },
-                    // TODO
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Measurement Field', recordKey: 'field' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Calories', recordKey: 'calories' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Carbs', recordKey: 'carbs' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Fat', recordKey: 'fat' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Protein', recordKey: 'protein' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Weight', recordKey: 'weight' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Body Fat', recordKey: 'bodyFat' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Temperature', recordKey: 'temperature' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: {
+                            label: 'Blood Pressure Systolic',
+                            recordKey: 'bloodPressureSystolic',
+                        },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: {
+                            label: 'Blood Pressure Diastolic',
+                            recordKey: 'bloodPressureDiastolic',
+                        },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Blood Oxygen', recordKey: 'bloodOxygen' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Neck', recordKey: 'neck' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Shoulders', recordKey: 'shoulders' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Chest', recordKey: 'chest' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Waist', recordKey: 'waist' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Left Bicep', recordKey: 'leftBicep' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Right Bicep', recordKey: 'rightBicep' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Left Forearm', recordKey: 'leftForearm' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Right Forearm', recordKey: 'rightForearm' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Left Thigh', recordKey: 'leftThigh' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Right Thigh', recordKey: 'rightThigh' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Left Calf', recordKey: 'leftCalf' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Right Calf', recordKey: 'rightCalf' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Cholesterol', recordKey: 'cholesterol' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Cholesterol HDL', recordKey: 'cholesterolHDL' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Cholesterol LDL', recordKey: 'cholesterolLDL' },
+                    },
+                    {
+                        component: InspectItemString,
+                        props: { label: 'Hemoglobin A1C', recordKey: 'hemoglobinA1C' },
+                    },
                 ],
             },
         }

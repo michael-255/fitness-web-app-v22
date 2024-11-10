@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const selectedStore = useSelectedStore()
 
-const property = computed(() => selectedStore.record[props.recordKey])
+const property = computed(() => String(selectedStore.record[props.recordKey] ?? '-'))
 </script>
 
 <template>

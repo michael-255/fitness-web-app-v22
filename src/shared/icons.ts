@@ -37,7 +37,7 @@ import {
     symRoundedMonitoring,
     symRoundedMonitorWeight,
     symRoundedMoreVert,
-    symRoundedOpenInNew,
+    symRoundedNewWindow,
     symRoundedPublish,
     symRoundedRecommend,
     symRoundedRedeem,
@@ -110,7 +110,7 @@ export const chartsIcon = symRoundedMonitoring
 export const checkIcon = symRoundedCheck
 export const lockIcon = symRoundedLock
 export const unlockIcon = symRoundedLockOpenRight
-export const openDialogIcon = symRoundedOpenInNew
+export const openDialogIcon = symRoundedNewWindow
 export const addNotesIcon = symRoundedAddNotes
 
 // Design Elements

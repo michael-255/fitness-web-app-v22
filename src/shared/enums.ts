@@ -139,7 +139,7 @@ export enum MeasurementFieldEnum {
     PROTEIN = 'Protein',
     // Weight
     BODY_WEIGHT = 'Body Weight',
-    BODY_FAT = 'Body Fat',
+    BODY_FAT = 'Body Fat', // %
     // Health
     TEMPERATURE = 'Temperature',
     BLOOD_PRESSURE = 'Blood Pressure', // Systolic/Diastolic
@@ -157,7 +157,7 @@ export enum MeasurementFieldEnum {
     CHOLESTEROL = 'Cholesterol', // mg/dL
     CHOLESTEROL_HDL = 'Cholesterol HDL', // mg/dL
     CHOLESTEROL_LDL = 'Cholesterol LDL', // mg/dL
-    HEMOGLOBIN_A1C = 'Hemoglobin A1C', // Percent
+    HEMOGLOBIN_A1C = 'Hemoglobin A1C', // %
 }
 
 //
