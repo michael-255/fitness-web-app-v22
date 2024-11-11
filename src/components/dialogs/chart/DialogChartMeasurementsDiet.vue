@@ -3,7 +3,7 @@ import { MeasurementServInst } from '@/services/MeasurementService'
 import { MeasurementFieldEnum } from '@/shared/enums'
 import { chartsIcon, closeIcon } from '@/shared/icons'
 import type { MeasurementType } from '@/shared/types'
-import { createTimelineChartOptions, getMeasurementTimelinedRecords } from '@/shared/utils'
+import { createTimelineChartOptions } from '@/shared/utils'
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -36,109 +36,57 @@ ChartJS.register(
 defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
 
-const showOneYearCalories = ref(false)
-const showAllTimeCalories = ref(false)
+const showChartCalories = ref(false)
+const showChartNutrition = ref(false)
 
-const showOneYearNutrition = ref(false)
-const showAllTimeNutrition = ref(false)
+const caloriesData: Ref<{ x: any; y: any }[]> = ref([])
+const carbsData: Ref<{ x: any; y: any }[]> = ref([])
+const fatData: Ref<{ x: any; y: any }[]> = ref([])
+const proteinData: Ref<{ x: any; y: any }[]> = ref([])
 
-const oneYearCaloriesData: Ref<{ x: any; y: any }[]> = ref([])
-const allTimeCaloriesData: Ref<{ x: any; y: any }[]> = ref([])
+const chartOptionsCalories: ChartOptions<'line'> = createTimelineChartOptions('Calories')
+const chartOptionsNutrition: ChartOptions<'line'> = createTimelineChartOptions('Nutrition', true)
 
-const oneYearNutritionData: Ref<{ x: any; y: any }[]> = ref([])
-const allTimeNutritionData: Ref<{ x: any; y: any }[]> = ref([])
-
-const chartOptionsOneYearCalories: ChartOptions<'line'> =
-    createTimelineChartOptions('Calories - Last Year')
-const chartOptionsAllTimeCalories: ChartOptions<'line'> =
-    createTimelineChartOptions('Calories - All Time')
-
-const chartOptionsOneYearNutrition: ChartOptions<'line'> = createTimelineChartOptions(
-    'Nutrition - Last Year',
-    true,
-)
-const chartOptionsAllTimeNutrition: ChartOptions<'line'> = createTimelineChartOptions(
-    'Nutrition - All Time',
-    true,
-)
-
-const chartDatasetOneYearCalories: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
+const chartDatasetCalories: ComputedRef<ChartData<'line', { x: number; y: number }[]>> = computed(
+    () => {
         return {
             datasets: [
                 {
                     label: '',
-                    data: oneYearCaloriesData.value,
+                    data: caloriesData.value,
                     borderColor: colors.getPaletteColor('cyan'),
                     backgroundColor: colors.getPaletteColor('white'),
                 },
             ],
         }
-    })
-const chartDatasetAllTimeCalories: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
-        return {
-            datasets: [
-                {
-                    label: '',
-                    data: allTimeCaloriesData.value,
-                    borderColor: colors.getPaletteColor('cyan'),
-                    backgroundColor: colors.getPaletteColor('white'),
-                },
-            ],
-        }
-    })
-
-const chartDatasetOneYearNutrition: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
+    },
+)
+const chartDatasetNutrition: ComputedRef<ChartData<'line', { x: number; y: number }[]>> = computed(
+    () => {
         return {
             datasets: [
                 {
                     label: MeasurementFieldEnum.CARBS,
-                    data: oneYearNutritionData.value,
+                    data: carbsData.value,
                     borderColor: colors.getPaletteColor('negative'),
                     backgroundColor: colors.getPaletteColor('white'),
                 },
                 {
                     label: MeasurementFieldEnum.FAT,
-                    data: oneYearNutritionData.value,
+                    data: fatData.value,
                     borderColor: colors.getPaletteColor('amber'),
                     backgroundColor: colors.getPaletteColor('white'),
                 },
                 {
                     label: MeasurementFieldEnum.PROTEIN,
-                    data: oneYearNutritionData.value,
+                    data: proteinData.value,
                     borderColor: colors.getPaletteColor('primary'),
                     backgroundColor: colors.getPaletteColor('white'),
                 },
             ],
         }
-    })
-const chartDatasetAllTimeNutrition: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
-        return {
-            datasets: [
-                {
-                    label: MeasurementFieldEnum.CARBS,
-                    data: allTimeNutritionData.value,
-                    borderColor: colors.getPaletteColor('negative'),
-                    backgroundColor: colors.getPaletteColor('white'),
-                },
-                {
-                    label: MeasurementFieldEnum.FAT,
-                    data: allTimeNutritionData.value,
-                    borderColor: colors.getPaletteColor('amber'),
-                    backgroundColor: colors.getPaletteColor('white'),
-                },
-                {
-                    label: MeasurementFieldEnum.PROTEIN,
-                    data: allTimeNutritionData.value,
-                    borderColor: colors.getPaletteColor('primary'),
-                    backgroundColor: colors.getPaletteColor('white'),
-                },
-            ],
-        }
-    })
+    },
+)
 
 onMounted(async () => {
     const allCalories = await MeasurementServInst.getRecordsByProperty<MeasurementType>(
@@ -158,28 +106,25 @@ onMounted(async () => {
         MeasurementFieldEnum.PROTEIN,
     )
 
-    const timelinedCalories = getMeasurementTimelinedRecords(allCalories, 'calories')
-    const timelinedCarbs = getMeasurementTimelinedRecords(allCarbs, 'carbs')
-    const timelinedFat = getMeasurementTimelinedRecords(allFat, 'fat')
-    const timelinedProtein = getMeasurementTimelinedRecords(allProtein, 'protein')
+    showChartCalories.value = allCalories.length > 0
+    showChartNutrition.value = allCarbs.length > 0 || allFat.length > 0 || allProtein.length > 0
 
-    showOneYearCalories.value = timelinedCalories.showOneYearChart
-    showAllTimeCalories.value = timelinedCalories.showAllTimeChart
-
-    showOneYearNutrition.value =
-        timelinedCarbs.showOneYearChart ||
-        timelinedFat.showOneYearChart ||
-        timelinedProtein.showOneYearChart
-    showAllTimeNutrition.value =
-        timelinedCarbs.showAllTimeChart ||
-        timelinedFat.showAllTimeChart ||
-        timelinedProtein.showAllTimeChart
-
-    oneYearCaloriesData.value = timelinedCalories.oneYearData
-    allTimeCaloriesData.value = timelinedCalories.allTimeData
-
-    oneYearNutritionData.value = timelinedCarbs.oneYearData
-    allTimeNutritionData.value = timelinedCarbs.allTimeData
+    caloriesData.value = allCalories.map((record) => ({
+        x: record.createdAt,
+        y: record.calories,
+    }))
+    carbsData.value = allCarbs.map((record) => ({
+        x: record.createdAt,
+        y: record.carbs,
+    }))
+    fatData.value = allFat.map((record) => ({
+        x: record.createdAt,
+        y: record.fat,
+    }))
+    proteinData.value = allProtein.map((record) => ({
+        x: record.createdAt,
+        y: record.protein,
+    }))
 })
 </script>
 
@@ -200,33 +145,17 @@ onMounted(async () => {
         <q-card class="q-dialog-plugin">
             <q-card-section>
                 <Line
-                    v-if="showOneYearCalories"
-                    :options="chartOptionsOneYearCalories"
-                    :data="chartDatasetOneYearCalories"
+                    v-if="showChartCalories"
+                    :options="chartOptionsCalories"
+                    :data="chartDatasetCalories"
                     style="max-height: 500px"
                     class="q-mt-xl"
                 />
 
                 <Line
-                    v-if="showOneYearNutrition"
-                    :options="chartOptionsOneYearNutrition"
-                    :data="chartDatasetOneYearNutrition"
-                    style="max-height: 500px"
-                    class="q-mt-xl"
-                />
-
-                <Line
-                    v-if="showAllTimeCalories"
-                    :options="chartOptionsAllTimeCalories"
-                    :data="chartDatasetAllTimeCalories"
-                    style="max-height: 500px"
-                    class="q-mt-xl"
-                />
-
-                <Line
-                    v-if="showAllTimeNutrition"
-                    :options="chartOptionsAllTimeNutrition"
-                    :data="chartDatasetAllTimeNutrition"
+                    v-if="showChartNutrition"
+                    :options="chartOptionsNutrition"
+                    :data="chartDatasetNutrition"
                     style="max-height: 500px"
                     class="q-mt-xl"
                 />

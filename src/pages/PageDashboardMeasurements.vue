@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import DashboardMeasurementItem from '@/components/dashboard/DashboardMeasurementItem.vue'
+import DialogChartMeasurementsBody from '@/components/dialogs/chart/DialogChartMeasurementsBody.vue'
 import DialogChartMeasurementsDiet from '@/components/dialogs/chart/DialogChartMeasurementsDiet.vue'
 import DialogChartMeasurementsHealth from '@/components/dialogs/chart/DialogChartMeasurementsHealth.vue'
+import DialogChartMeasurementsLabWork from '@/components/dialogs/chart/DialogChartMeasurementsLabWork.vue'
 import DialogChartMeasurementsWeight from '@/components/dialogs/chart/DialogChartMeasurementsWeight.vue'
 import DialogBodyModule from '@/components/dialogs/measurements/DialogBodyModule.vue'
 import DialogDietModule from '@/components/dialogs/measurements/DialogDietModule.vue'
@@ -154,7 +156,7 @@ onUnmounted(() => {
                 description="The Body module tracks various physical dimension measurements which provide a detailed overview of an individual's body composition and physical attributes."
                 :icon="bodyModuleIcon"
                 :hasRecords="hasBodyRecords"
-                @onCharts="() => console.log('Body charts clicked')"
+                @onCharts="() => $q.dialog({ component: DialogChartMeasurementsBody })"
                 @onAccessModule="() => $q.dialog({ component: DialogBodyModule })"
             />
 
@@ -163,7 +165,7 @@ onUnmounted(() => {
                 description="The Lab Work module tracks various blood measurements. These measurements provide a detailed overview of an individual's blood health and can be used to assess cardiovascular risk and monitor conditions such as diabetes."
                 :icon="labWorkModuleIcon"
                 :hasRecords="hasLabWorkRecords"
-                @onCharts="() => console.log('Lab Work charts clicked')"
+                @onCharts="() => $q.dialog({ component: DialogChartMeasurementsLabWork })"
                 @onAccessModule="() => $q.dialog({ component: DialogLabWorkModule })"
             />
         </q-list>

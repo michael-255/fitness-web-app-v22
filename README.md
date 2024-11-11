@@ -5,7 +5,7 @@ features to track and enhance your workouts, exercises, and overall fitness jour
 
 ## TODO `Measurements`
 
--   Charts dialogs
+-   Finished dialogs, but may have to fine tune options and colors
 
 ## TODO `Plans`
 

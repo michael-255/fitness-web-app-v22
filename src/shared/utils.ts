@@ -3,7 +3,7 @@ import type { ChartOptions, TooltipItem } from 'chart.js'
 import { enUS } from 'date-fns/locale'
 import { date, uid, type QTableColumn } from 'quasar'
 import { tableSchema } from './schemas'
-import type { IdType, MeasurementType, SettingValueType } from './types'
+import type { IdType, SettingValueType } from './types'
 
 /**
  * Creates an Id with the table encoded in the prefix. Encoding this extra information helps with
@@ -435,7 +435,37 @@ export function createActivityChartOptions(label: string): ChartOptions<'scatter
 export function createTimelineChartOptions(
     label: string,
     includeLegend?: boolean,
+    enforcePercent?: boolean,
 ): ChartOptions<'line'> {
+    const scales: any = {
+        x: {
+            type: 'time',
+            time: {
+                unit: 'day',
+            },
+            adapters: {
+                date: {
+                    locale: enUS,
+                },
+            },
+            ticks: {
+                autoSkip: true,
+                maxRotation: 60,
+                minRotation: 60,
+            },
+        },
+    }
+
+    if (enforcePercent) {
+        scales.y = {
+            min: 0,
+            max: 100,
+            ticks: {
+                callback: (value: number) => `${value}%`,
+            },
+        }
+    }
+
     return {
         responsive: true,
         aspectRatio: 1,
@@ -469,61 +499,6 @@ export function createTimelineChartOptions(
                 },
             },
         },
-        scales: {
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'day',
-                },
-                adapters: {
-                    date: {
-                        locale: enUS,
-                    },
-                },
-                ticks: {
-                    autoSkip: true,
-                    maxRotation: 60,
-                    minRotation: 60,
-                },
-            },
-        },
-    }
-}
-
-/**
- * Returns timelined records for use in chart datasets that also include a way to determine if the
- * data should be displayed in a one year chart or an all time chart.
- * @param allRecords Array of records from a table
- * @param property Property to chart
- * @returns
- */
-export function getMeasurementTimelinedRecords(
-    allRecords: MeasurementType[],
-    property: string,
-): {
-    showOneYearChart: boolean
-    showAllTimeChart: boolean
-    oneYearData: { x: number; y: number }[]
-    allTimeData: { x: number; y: number }[]
-} {
-    const oneYearRecords = allRecords.filter(
-        (record) => record.createdAt > Date.now() - DurationMSEnum['One Year'],
-    )
-
-    const oneYearDataset = oneYearRecords.map((record: Record<string, any>) => ({
-        x: record.createdAt,
-        y: record[property],
-    }))
-
-    const allTimeDataset = allRecords.map((record: Record<string, any>) => ({
-        x: record.createdAt,
-        y: record[property],
-    }))
-
-    return {
-        showOneYearChart: oneYearRecords.length > 0,
-        showAllTimeChart: allRecords.length > 0,
-        oneYearData: oneYearDataset,
-        allTimeData: allTimeDataset,
+        scales: scales,
     }
 }

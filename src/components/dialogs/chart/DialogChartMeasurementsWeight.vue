@@ -3,7 +3,7 @@ import { MeasurementServInst } from '@/services/MeasurementService'
 import { MeasurementFieldEnum } from '@/shared/enums'
 import { chartsIcon, closeIcon } from '@/shared/icons'
 import type { MeasurementType } from '@/shared/types'
-import { createTimelineChartOptions, getMeasurementTimelinedRecords } from '@/shared/utils'
+import { createTimelineChartOptions } from '@/shared/utils'
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -36,81 +36,49 @@ ChartJS.register(
 defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
 
-const showOneYearBodyWeight = ref(false)
-const showAllTimeBodyWeight = ref(false)
+const showChartBodyWeight = ref(false)
+const showChartBodyFat = ref(false)
 
-const showOneYearBodyFat = ref(false)
-const showAllTimeBodyFat = ref(false)
+const bodyWeightData: Ref<{ x: any; y: any }[]> = ref([])
+const bodyFatData: Ref<{ x: any; y: any }[]> = ref([])
 
-const oneYearBodyWeightData: Ref<{ x: any; y: any }[]> = ref([])
-const allTimeBodyWeightData: Ref<{ x: any; y: any }[]> = ref([])
+const chartOptionsBodyWeight: ChartOptions<'line'> = createTimelineChartOptions('Body Weight')
 
-const oneYearBodyFatData: Ref<{ x: any; y: any }[]> = ref([])
-const allTimeBodyFatData: Ref<{ x: any; y: any }[]> = ref([])
+const chartOptionsBodyFat: ChartOptions<'line'> = createTimelineChartOptions(
+    'Body Fat',
+    false,
+    true,
+)
 
-const chartOptionsOneYearBodyWeight: ChartOptions<'line'> =
-    createTimelineChartOptions('Body Weight - Last Year')
-const chartOptionsAllTimeBodyWeight: ChartOptions<'line'> =
-    createTimelineChartOptions('Body Weight - All Time')
-
-const chartOptionsOneYearBodyFat: ChartOptions<'line'> =
-    createTimelineChartOptions('Body Fat - Last Year')
-const chartOptionsAllTimeBodyFat: ChartOptions<'line'> =
-    createTimelineChartOptions('Body Fat - All Time')
-
-const chartDataOneYearBodyWeight: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
+const chartDataBodyWeight: ComputedRef<ChartData<'line', { x: number; y: number }[]>> = computed(
+    () => {
         return {
             datasets: [
                 {
                     label: '',
-                    data: oneYearBodyWeightData.value,
+                    data: bodyWeightData.value,
                     borderColor: colors.getPaletteColor('primary'),
                     backgroundColor: colors.getPaletteColor('white'),
                 },
             ],
         }
-    })
-const chartDataAllTimeBodyWeight: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
-        return {
-            datasets: [
-                {
-                    label: '',
-                    data: allTimeBodyWeightData.value,
-                    borderColor: colors.getPaletteColor('primary'),
-                    backgroundColor: colors.getPaletteColor('white'),
-                },
-            ],
-        }
-    })
+    },
+)
 
-const chartDataOneYearBodyFat: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
+const chartDataBodyFat: ComputedRef<ChartData<'line', { x: number; y: number }[]>> = computed(
+    () => {
         return {
             datasets: [
                 {
                     label: '',
-                    data: oneYearBodyFatData.value,
+                    data: bodyFatData.value,
                     borderColor: colors.getPaletteColor('amber'),
                     backgroundColor: colors.getPaletteColor('white'),
                 },
             ],
         }
-    })
-const chartDataAllTimeBodyFat: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
-        return {
-            datasets: [
-                {
-                    label: '',
-                    data: allTimeBodyFatData.value,
-                    borderColor: colors.getPaletteColor('amber'),
-                    backgroundColor: colors.getPaletteColor('white'),
-                },
-            ],
-        }
-    })
+    },
+)
 
 onMounted(async () => {
     const allBodyWeight = await MeasurementServInst.getRecordsByProperty<MeasurementType>(
@@ -122,20 +90,17 @@ onMounted(async () => {
         MeasurementFieldEnum.BODY_FAT,
     )
 
-    const timelinedBodyWeight = getMeasurementTimelinedRecords(allBodyWeight, 'bodyWeight')
-    const timelinedBodyFat = getMeasurementTimelinedRecords(allBodyFat, 'bodyFat')
+    showChartBodyWeight.value = allBodyWeight.length > 0
+    showChartBodyFat.value = allBodyFat.length > 0
 
-    showOneYearBodyWeight.value = timelinedBodyWeight.showOneYearChart
-    showAllTimeBodyWeight.value = timelinedBodyWeight.showAllTimeChart
-
-    showOneYearBodyFat.value = timelinedBodyFat.showOneYearChart
-    showAllTimeBodyFat.value = timelinedBodyFat.showAllTimeChart
-
-    oneYearBodyWeightData.value = timelinedBodyWeight.oneYearData
-    allTimeBodyWeightData.value = timelinedBodyWeight.allTimeData
-
-    oneYearBodyFatData.value = timelinedBodyFat.oneYearData
-    allTimeBodyFatData.value = timelinedBodyFat.allTimeData
+    bodyWeightData.value = allBodyWeight.map((record) => ({
+        x: record.createdAt,
+        y: record.bodyWeight,
+    }))
+    bodyFatData.value = allBodyFat.map((record) => ({
+        x: record.createdAt,
+        y: record.bodyFat,
+    }))
 })
 </script>
 
@@ -149,40 +114,24 @@ onMounted(async () => {
     >
         <q-toolbar class="bg-info text-white toolbar-height">
             <q-icon :name="chartsIcon" size="sm" class="q-mx-sm" />
-            <q-toolbar-title>Diet Module Charts</q-toolbar-title>
+            <q-toolbar-title>Weight Module Charts</q-toolbar-title>
             <q-btn flat round :icon="closeIcon" @click="onDialogCancel" />
         </q-toolbar>
 
         <q-card class="q-dialog-plugin">
             <q-card-section>
                 <Line
-                    v-if="showOneYearBodyWeight"
-                    :options="chartOptionsOneYearBodyWeight"
-                    :data="chartDataOneYearBodyWeight"
+                    v-if="showChartBodyWeight"
+                    :options="chartOptionsBodyWeight"
+                    :data="chartDataBodyWeight"
                     style="max-height: 500px"
                     class="q-mt-xl"
                 />
 
                 <Line
-                    v-if="showOneYearBodyFat"
-                    :options="chartOptionsOneYearBodyFat"
-                    :data="chartDataOneYearBodyFat"
-                    style="max-height: 500px"
-                    class="q-mt-xl"
-                />
-
-                <Line
-                    v-if="showAllTimeBodyWeight"
-                    :options="chartOptionsAllTimeBodyWeight"
-                    :data="chartDataAllTimeBodyWeight"
-                    style="max-height: 500px"
-                    class="q-mt-xl"
-                />
-
-                <Line
-                    v-if="showAllTimeBodyFat"
-                    :options="chartOptionsAllTimeBodyFat"
-                    :data="chartDataAllTimeBodyFat"
+                    v-if="showChartBodyFat"
+                    :options="chartOptionsBodyFat"
+                    :data="chartDataBodyFat"
                     style="max-height: 500px"
                     class="q-mt-xl"
                 />

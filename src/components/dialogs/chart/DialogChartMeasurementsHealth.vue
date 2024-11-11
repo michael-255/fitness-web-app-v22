@@ -3,7 +3,7 @@ import { MeasurementServInst } from '@/services/MeasurementService'
 import { MeasurementFieldEnum } from '@/shared/enums'
 import { chartsIcon, closeIcon } from '@/shared/icons'
 import type { MeasurementType } from '@/shared/types'
-import { createTimelineChartOptions, getMeasurementTimelinedRecords } from '@/shared/utils'
+import { createTimelineChartOptions } from '@/shared/utils'
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -36,57 +36,109 @@ ChartJS.register(
 defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
 
-const showOneYearTemperature = ref(false)
-const showAllTimeTemperature = ref(false)
+const showChartTemperature = ref(false)
+const showChartBloodPressure = ref(false)
+const showChartBloodOxygen = ref(false)
 
-const oneYearTemperatureData: Ref<{ x: any; y: any }[]> = ref([])
-const allTimeTemperatureData: Ref<{ x: any; y: any }[]> = ref([])
+const temperatureData: Ref<{ x: any; y: any }[]> = ref([])
+const systolicBloodPressureData: Ref<{ x: any; y: any }[]> = ref([])
+const diastolicBloodPressureData: Ref<{ x: any; y: any }[]> = ref([])
+const bloodOxygenData: Ref<{ x: any; y: any }[]> = ref([])
 
-const chartOptionsOneYearTemperature: ChartOptions<'line'> =
-    createTimelineChartOptions('Temperature - Last Year')
-const chartOptionsAllTimeTemperature: ChartOptions<'line'> =
-    createTimelineChartOptions('Temperature - All Time')
+const chartOptionsTemperature: ChartOptions<'line'> = createTimelineChartOptions('Temperature')
+const chartOptionsBloodPressure: ChartOptions<'line'> = createTimelineChartOptions(
+    'Blood Pressure',
+    true,
+)
+const chartOptionsBloodOxygen: ChartOptions<'line'> = createTimelineChartOptions(
+    'Blood Oxygen',
+    false,
+    true,
+)
 
-const chartDataOneYearTemperature: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
+const chartDataTemperature: ComputedRef<ChartData<'line', { x: number; y: number }[]>> = computed(
+    () => {
         return {
             datasets: [
                 {
                     label: '',
-                    data: oneYearTemperatureData.value,
+                    data: temperatureData.value,
+                    borderColor: colors.getPaletteColor('negative'),
+                    backgroundColor: colors.getPaletteColor('white'),
+                },
+            ],
+        }
+    },
+)
+const chartDataBloodPressure: ComputedRef<ChartData<'line', { x: number; y: number }[]>> = computed(
+    () => {
+        return {
+            datasets: [
+                {
+                    label: 'Systolic',
+                    data: systolicBloodPressureData.value,
+                    borderColor: colors.getPaletteColor('info'),
+                    backgroundColor: colors.getPaletteColor('white'),
+                },
+                {
+                    label: 'Diastolic',
+                    data: diastolicBloodPressureData.value,
+                    borderColor: colors.getPaletteColor('accent'),
+                    backgroundColor: colors.getPaletteColor('white'),
+                },
+            ],
+        }
+    },
+)
+const chartDataBloodOxygen: ComputedRef<ChartData<'line', { x: number; y: number }[]>> = computed(
+    () => {
+        return {
+            datasets: [
+                {
+                    label: '',
+                    data: bloodOxygenData.value,
                     borderColor: colors.getPaletteColor('primary'),
                     backgroundColor: colors.getPaletteColor('white'),
                 },
             ],
         }
-    })
-const chartDataAllTimeTemperature: ComputedRef<ChartData<'line', { x: number; y: number }[]>> =
-    computed(() => {
-        return {
-            datasets: [
-                {
-                    label: '',
-                    data: allTimeTemperatureData.value,
-                    borderColor: colors.getPaletteColor('primary'),
-                    backgroundColor: colors.getPaletteColor('white'),
-                },
-            ],
-        }
-    })
+    },
+)
 
 onMounted(async () => {
     const allTemps = await MeasurementServInst.getRecordsByProperty<MeasurementType>(
         'field',
         MeasurementFieldEnum.TEMPERATURE,
     )
+    const allBloodPressure = await MeasurementServInst.getRecordsByProperty<MeasurementType>(
+        'field',
+        MeasurementFieldEnum.BLOOD_PRESSURE,
+    )
+    const allBloodOxygen = await MeasurementServInst.getRecordsByProperty<MeasurementType>(
+        'field',
+        MeasurementFieldEnum.BLOOD_OXYGEN,
+    )
 
-    const timelinedTemps = getMeasurementTimelinedRecords(allTemps, 'temperature')
+    showChartTemperature.value = allTemps.length > 0
+    showChartBloodPressure.value = allBloodPressure.length > 0
+    showChartBloodOxygen.value = allBloodOxygen.length > 0
 
-    showOneYearTemperature.value = timelinedTemps.showOneYearChart
-    showAllTimeTemperature.value = timelinedTemps.showAllTimeChart
-
-    oneYearTemperatureData.value = timelinedTemps.oneYearData
-    allTimeTemperatureData.value = timelinedTemps.allTimeData
+    temperatureData.value = allTemps.map((record) => ({
+        x: record.createdAt,
+        y: record.temperature,
+    }))
+    systolicBloodPressureData.value = allBloodPressure.map((record) => ({
+        x: record.createdAt,
+        y: record.bloodPressureSystolic,
+    }))
+    diastolicBloodPressureData.value = allBloodPressure.map((record) => ({
+        x: record.createdAt,
+        y: record.bloodPressureDiastolic,
+    }))
+    bloodOxygenData.value = allBloodOxygen.map((record) => ({
+        x: record.createdAt,
+        y: record.bloodOxygen,
+    }))
 })
 </script>
 
@@ -100,24 +152,32 @@ onMounted(async () => {
     >
         <q-toolbar class="bg-info text-white toolbar-height">
             <q-icon :name="chartsIcon" size="sm" class="q-mx-sm" />
-            <q-toolbar-title>Diet Module Charts</q-toolbar-title>
+            <q-toolbar-title>Health Module Charts</q-toolbar-title>
             <q-btn flat round :icon="closeIcon" @click="onDialogCancel" />
         </q-toolbar>
 
         <q-card class="q-dialog-plugin">
             <q-card-section>
                 <Line
-                    v-if="showOneYearTemperature"
-                    :options="chartOptionsOneYearTemperature"
-                    :data="chartDataOneYearTemperature"
+                    v-if="showChartTemperature"
+                    :options="chartOptionsTemperature"
+                    :data="chartDataTemperature"
                     style="max-height: 500px"
                     class="q-mt-xl"
                 />
 
                 <Line
-                    v-if="showAllTimeTemperature"
-                    :options="chartOptionsAllTimeTemperature"
-                    :data="chartDataAllTimeTemperature"
+                    v-if="showChartBloodPressure"
+                    :options="chartOptionsBloodPressure"
+                    :data="chartDataBloodPressure"
+                    style="max-height: 500px"
+                    class="q-mt-xl"
+                />
+
+                <Line
+                    v-if="showChartBloodOxygen"
+                    :options="chartOptionsBloodOxygen"
+                    :data="chartDataBloodOxygen"
                     style="max-height: 500px"
                     class="q-mt-xl"
                 />
