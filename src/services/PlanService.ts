@@ -23,7 +23,7 @@ export class PlanService extends BaseService {
         tableColumn('createdAt', 'Created Date', 'DATE'),
     ]
     supportsColumnFilters = false
-    supportsActivityCharts = true
+    supportsActivityCharts = false
     supportsCharts = false
     supportsInspect = false
     supportsCreate = false

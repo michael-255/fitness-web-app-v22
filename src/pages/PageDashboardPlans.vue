@@ -47,7 +47,7 @@ const phTimestamp = Date.now()
         <q-list padding>
             <q-item>
                 <q-item-section>
-                    <q-card>
+                    <q-card flat bordered>
                         <q-item class="q-mt-sm">
                             <q-item-section top>
                                 <q-item-label class="text-h5">Placeholder</q-item-label>
