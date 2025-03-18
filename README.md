@@ -3,6 +3,10 @@
 Fitness Tracker is an app designed to help you achieve your fitness goals. It offers a variety of
 features to track and enhance your workouts, exercises, and overall fitness journey.
 
+## TODO
+
+-   Rebuild base project for web app template, or work with this?
+
 ## TODO `Measurements`
 
 -   Finished chart dialogs, but may have to fine tune options and colors
